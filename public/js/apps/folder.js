@@ -7,7 +7,7 @@ const URL = params.split('?')[0];
 let files = ''
 
 
-
+let url_folder = '..'
 
 
 fetch(URL + `/api/local_files/dir=".."`, {
@@ -27,7 +27,7 @@ fetch(URL + `/api/local_files/dir=".."`, {
             files = files + `<div 
             class='
             ${JSON.parse(response)[i]['IsFolder'] ? "file_folder" : "file_no_folder"} 
-            ${i % 2 == 0 ? 'fg_line' : 'bg_line'} line' >
+            ${i % 2 == 0 ? 'fg_line' : 'bg_line'} line' onclick='to_file("${JSON.parse(response)[i]['Name']}")' >
             <img class='image' src="${JSON.parse(response)[i]['IsFolder'] ?'../../images/res/folder/folder.png' : '../../images/res/folder/file.png'}" alt="">
             ${JSON.parse(response)[i]['Name']}
             </div>`
@@ -82,6 +82,43 @@ fetch(URL + `/api/local_files/dir=".."`, {
 
 
 
+function to_file(dir) {
+    console.log(dir);
+    url_folder = url_folder + 'slash' + dir;
+    fetch(URL + `/api/local_files/dir="${url_folder}"`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "GET",
+        })
+        .then(response => response.text())
+        .then((response) => {
+            response = JSON.parse(response)
+            console.log(response);
+
+            files = ''
+            files = files + `<div class="line back bg_line" onclick='to_file("..")'>. .</div>`
+            while (document.querySelector('.app_folder').firstChild) {
+                document.querySelector('.app_folder').removeChild(document.querySelector('.app_folder').firstChild);
+            }
+
+            for (let i = 0; i < JSON.parse(response).length; i++) {
+
+            files = files + `<div 
+                class='
+                ${JSON.parse(response)[i]['IsFolder'] ? "file_folder" : "file_no_folder"} 
+                ${i % 2 == 0 ? 'fg_line' : 'bg_line'} line' onclick='to_file("${JSON.parse(response)[i]['Name']}")' >
+                <img class='image' src="${JSON.parse(response)[i]['IsFolder'] ?'../../images/res/folder/folder.png' : '../../images/res/folder/file.png'}" alt="">
+                ${JSON.parse(response)[i]['Name']}
+                </div>`
+
+            document.querySelector('.app_folder').innerHTML = files;
+
+            }
+        })
+        .catch(err => console.log(err))
+}
 
 
 // file:///Users/nikitakhvatov/Desktop/dev/macoshtml/js/apps/folder.html

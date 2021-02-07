@@ -7,6 +7,7 @@ import(
     "net/http"
     "io/ioutil"
     "github.com/gorilla/mux"
+    "strings"
 )
 
 type Localfile struct {
@@ -20,7 +21,11 @@ func getFiles(w http.ResponseWriter, r * http.Request) {
     vars := mux.Vars(r)
     dir := vars["dir"];
 
-    files, err := ioutil.ReadDir(dir)
+    res1 := strings.Replace(dir, "slash", "/", 20) 
+
+    fmt.Print(res1)
+
+    files, err := ioutil.ReadDir(res1)
 
     for _, file := range files {
         localfiles = append(localfiles, Localfile{file.Name(), file.IsDir()})
