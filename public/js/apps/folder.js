@@ -6,7 +6,7 @@ const URL = params.split('?')[0];
 
 let files = ''
 
-fetch(URL + 'local_files', {
+fetch(URL + '/api/local_files', {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -23,7 +23,6 @@ fetch(URL + 'local_files', {
 
 
         for (let i = 0; i < JSON.parse(response).length; i++) {
-            console.log(JSON.parse(response)[i]['Name']);
 
             files = files + `<div 
             class='
@@ -32,10 +31,7 @@ fetch(URL + 'local_files', {
             <img class='image' src="${JSON.parse(response)[i]['IsFolder'] ?'../../images/res/folder/folder.png' : '../../images/res/folder/file.png'}" alt="">
             ${JSON.parse(response)[i]['Name']}
             </div>`
-            console.log('-------');
         }
-
-        console.log(files);
 
         folder = new app('folder', 'folder.png', 600, 400, false, 'Проводник', `
             <div class="app_folder" ><div class="line back bg_line" >. .</div> ${files}</div>
