@@ -17,17 +17,16 @@ type Localfile struct {
 func getFiles(w http.ResponseWriter, r * http.Request) {
     localfiles := [] Localfile {}
 
-    files, err := ioutil.ReadDir(".")
-    if err != nil {
-        log.Fatal(err)
-    }
+    vars := mux.Vars(r)
+    dir := vars["dir"];
+
+    files, err := ioutil.ReadDir(dir)
 
     for _, file := range files {
         localfiles = append(localfiles, Localfile{file.Name(), file.IsDir()})
     }
 
-    json_data2,
-    err := json.Marshal(localfiles)
+    json_data2, err := json.Marshal(localfiles)
 
     if err != nil {
         log.Fatal(err)
@@ -43,7 +42,9 @@ func main() {
 
     router := mux.NewRouter()
 
-    router.HandleFunc("/api/local_files", getFiles)
+    router.HandleFunc(`/api/local_files/dir="{dir}"`, getFiles)
+
+    router.HandleFunc(`/api/local_files`, getFiles)
 
     http.Handle("/api/", router)
 
