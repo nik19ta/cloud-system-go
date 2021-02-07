@@ -59,11 +59,16 @@ function app(app_name, icon, width, height, change_size, title, html) {
     this.change_size = change_size;
     this.title = title;
     this.icon = icon;
+    this.isopen = false;
     this.close_window = function() {
         document.querySelector(`.${this.title}`).remove()
         offset = offset - 30
+        this.isopen = !this.isopen
     }
     this.render = function() {
+        if (this.isopen) {
+            return
+        }
         let app = document.createElement('div')
         app.className = this.title
         app.id = this.title
@@ -109,6 +114,7 @@ function app(app_name, icon, width, height, change_size, title, html) {
         document.querySelector('body').appendChild(app)
 
         offset = offset + 30
+        this.isopen = !this.isopen
         drag(app)
     }
     this.render_icon = function() { 
