@@ -53,13 +53,15 @@ let offset = 30;
 let apps = []
 
 
-function app(app_name, icon, width, height, change_size, title, html) {
+function app(app_name, show_in_dock, icon, width, height, change_size, title, html, callback) {
     this.width = width;
     this.height = height;
+    this.show_in_dock = show_in_dock;
     this.change_size = change_size;
     this.title = title;
     this.icon = icon;
     this.isopen = false;
+    this.callback = callback;
     this.close_window = function() {
         document.querySelector(`.${this.title}`).remove()
         offset = offset - 30
@@ -131,7 +133,9 @@ function app(app_name, icon, width, height, change_size, title, html) {
         dock.appendChild(elem_icon)
 
     }
-    this.render_icon()
+    if (show_in_dock) {
+        this.render_icon()
+    }
 }
 
 // function render_icons() {

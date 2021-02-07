@@ -10,7 +10,7 @@ let url_folder = '..'
 
 
 
-fetch(URL + `/api/local_files/dir=".."`, {
+fetch(URL + `/api/local_files/dir="${url_folder}"`, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -30,14 +30,14 @@ fetch(URL + `/api/local_files/dir=".."`, {
                 ${JSON.parse(response)[i]['IsFolder'] ? "file_folder" : "file_no_folder"} 
                 ${i % 2 == 0 ? 'fg_line' : 'bg_line'} line'
 
-            ${JSON.parse(response)[i]['IsFolder'] ? `onclick='to_file("${JSON.parse(response)[i]['Name']}")'` : "" }>
+            ${JSON.parse(response)[i]['IsFolder'] ? `onclick='to_file("${JSON.parse(response)[i]['Name']}")'` : `onclick='folder_open_file("${JSON.parse(response)[i]['Name']}")'` }>
 
             <img class='image' src="${JSON.parse(response)[i]['IsFolder'] ?'../../images/res/folder/folder.png' : '../../images/res/folder/file.png'}" alt="">
 
             ${JSON.parse(response)[i]['Name']}
             </div>`
         }
-        folder = new app('folder', 'folder.png', 600, 400, false, 'Проводник', `
+        folder = new app('folder', true, 'folder.png', 600, 400, false, 'Проводник', `
             <div class="app_folder" ><div class="line back bg_line" onclick='to_file("..")' >. .</div> ${files}</div>
                 
             <style>
@@ -121,7 +121,7 @@ function to_file(dir) {
                 ${JSON.parse(response)[i]['IsFolder'] ? "file_folder" : "file_no_folder"} 
                 ${i % 2 == 0 ? 'fg_line' : 'bg_line'} line'
 
-            ${JSON.parse(response)[i]['IsFolder'] ? `onclick='to_file("${JSON.parse(response)[i]['Name']}")'` : "" }>
+            ${JSON.parse(response)[i]['IsFolder'] ? `onclick='to_file("${JSON.parse(response)[i]['Name']}")'` : `onclick='folder_open_file("${JSON.parse(response)[i]['Name']}")'` }>
 
             <img class='image' src="${JSON.parse(response)[i]['IsFolder'] ?'../../images/res/folder/folder.png' : '../../images/res/folder/file.png'}" alt="">
 
@@ -144,8 +144,41 @@ function to_file(dir) {
         .catch(err => console.log(err))
 }
 
-function open(filename) {
-    console.log(filename);
+function folder_open_file(filename) {
+    let localpathwithfile = url_folder + 'slash' + filename;
+    console.log(localpathwithfile);
+
+    fetch(URL + `/api/readfile/file="${localpathwithfile}"`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "GET",
+        })
+        .then(response => response.text())
+        .then((response) => {
+            response = JSON.parse(JSON.parse(response));
+            openReader(response[0]['Data'], response[0]['Name'])
+        })
+        .catch(err => console.log(err))
+}   
+
+function openReader(data, name) {
+    reader.callback(data, name)
+    // let reader = document.createElement('div')
+    //     reader.innerHTML = data;
+    //     reader.className = 'ReaderApp';
+    //     reader.style.width = '500px';
+    //     reader.style.height = '500px';
+    //     reader.style.position = 'absolute';
+    //     reader.style.overflow = 'auto';
+    //     reader.style.background = '#202020';
+    //     reader.style.color = '#ffffff';
+    //     reader.style.padding = '10px';
+
+    //     drag(reader)
+    
+    // document.querySelector('body').appendChild(reader)
 }
 
 // file:///Users/nikitakhvatov/Desktop/dev/macoshtml/js/apps/folder.html

@@ -1,5 +1,4 @@
-let settings = new app('settings','settings.png', 600, 500, false, 'Настройки', `
-
+let settings = new app('settings', true, 'settings.png', 600, 500, false, 'Настройки', `
 <div class="app" ></div>
     
 <style>
