@@ -38,7 +38,7 @@ fetch(URL + 'local_files', {
         console.log(files);
 
         folder = new app('folder', 'folder.png', 600, 400, false, 'Проводник', `
-            <div class="app_folder" ><div class="line back" >. .</div> ${files}</div>
+            <div class="app_folder" ><div class="line back bg_line" >. .</div> ${files}</div>
                 
             <style>
             .app_folder{
