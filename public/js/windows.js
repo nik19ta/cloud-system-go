@@ -58,6 +58,7 @@ function app(app_name, icon, width, height, change_size, title, html) {
     this.height = height;
     this.change_size = change_size;
     this.title = title;
+    this.icon = icon;
     this.close_window = function() {
         document.querySelector(`.${this.title}`).remove()
         offset = offset - 30
@@ -110,29 +111,42 @@ function app(app_name, icon, width, height, change_size, title, html) {
         offset = offset + 30
         drag(app)
     }
+    this.render_icon = function() { 
 
-    apps.push({ icon: icon, func: `${app_name}.render` })
-}
-
-function render_icons() {
-    for (let i = 0; i < apps.length; i++) {
-        console.log(apps[i]['icon']);
-
-        let icon = document.createElement('img')
-        icon.className = `icon_in_dock`
-        icon.src = `./icons/${apps[i]['icon']}`
-        icon.style.width = `34px`
-        icon.style.height = `34px`
-        icon.onclick = function() {
-            eval(`${apps[i]['func']}()`)
+        let elem_icon = document.createElement('img')
+        elem_icon.className = `icon_in_dock`     
+        elem_icon.src = `./icons/${this.icon}`
+        elem_icon.style.width = `34px`
+        elem_icon.style.height = `34px`
+        elem_icon.onclick = function() {
+            eval(`${app_name}.render()`)
         }
 
-        dock.appendChild(icon)
+        dock.appendChild(elem_icon)
+
     }
+    this.render_icon()
 }
 
-setTimeout(() => {
-    render_icons()
-}, 1000);
+// function render_icons() {
+//     for (let i = 0; i < apps.length; i++) {
+//         console.log(apps[i]['icon']);
+
+//         let icon = document.createElement('img')
+//         icon.className = `icon_in_dock`
+//         icon.src = `./icons/${apps[i]['icon']}`
+//         icon.style.width = `34px`
+//         icon.style.height = `34px`
+//         icon.onclick = function() {
+//             eval(`${apps[i]['func']}()`)
+//         }
+
+//         dock.appendChild(icon)
+//     }
+// }
+
+// setTimeout(() => {
+//     render_icons()
+// }, 1000);
 
 // settingsApp.render()

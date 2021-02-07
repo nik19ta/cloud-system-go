@@ -6,16 +6,16 @@ const URL = params.split('?')[0];
 
 let files = ''
 
-fetch(URL + '/api/local_files', {
+
+
+
+
+fetch(URL + `/api/local_files/dir=".."`, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         method: "GET",
-        // body: JSON.stringify({
-        //     search: keywords,
-        //     params: params
-        // })
     })
     .then(response => response.text())
     .then((response) => {
@@ -31,8 +31,8 @@ fetch(URL + '/api/local_files', {
             <img class='image' src="${JSON.parse(response)[i]['IsFolder'] ?'../../images/res/folder/folder.png' : '../../images/res/folder/file.png'}" alt="">
             ${JSON.parse(response)[i]['Name']}
             </div>`
-        }
 
+        }
         folder = new app('folder', 'folder.png', 600, 400, false, 'Проводник', `
             <div class="app_folder" ><div class="line back bg_line" >. .</div> ${files}</div>
                 
@@ -40,6 +40,7 @@ fetch(URL + '/api/local_files', {
             .app_folder{
                 width: 100%;
                 padding: 8px;
+                padding-bottom: 10px;
                 font-size: 12px;
                 color: #fff;
                 width: 600px;
@@ -47,6 +48,7 @@ fetch(URL + '/api/local_files', {
                 background-color: rgb(30, 30, 30);
                 border-bottom-left-radius: 8px;
                 border-bottom-right-radius: 8px;
+                overflow-y: auto;
             }
             .line{
                 display: flex;
@@ -72,6 +74,8 @@ fetch(URL + '/api/local_files', {
             }
             </style>
     `)
+
+
 
     })
     .catch(err => console.log(err))
