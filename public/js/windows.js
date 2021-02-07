@@ -1,5 +1,5 @@
-function drag(elem) {
-    elem.onmousedown = function(e) {
+function drag(elem, elemM) {
+    elemM.onmousedown = function(e) {
 
         var coords = getCoords(elem);
         var shiftX = e.pageX - coords.left;
@@ -27,7 +27,7 @@ function drag(elem) {
 
     }
 
-    elem.ondragstart = function() {
+    elemM.ondragstart = function() {
         return false;
     };
 
@@ -117,7 +117,7 @@ function app(app_name, show_in_dock, icon, width, height, change_size, title, ht
 
         offset = offset + 30
         this.isopen = !this.isopen
-        drag(app)
+        drag(app, header)
     }
     this.render_icon = function() { 
 
