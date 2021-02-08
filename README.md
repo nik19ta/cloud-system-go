@@ -1,3 +1,3 @@
 # Облочная операционная система
 
-![screenshot](./README/screenshot.png)
+![screenshot](./README/screen.png)
