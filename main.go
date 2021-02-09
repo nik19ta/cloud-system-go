@@ -1,102 +1,102 @@
 package main
 
-import(
-    "encoding/json"
-    "fmt"
-    "log"
-    "net/http"
-    "io/ioutil"
-    "github.com/gorilla/mux"
-    "strings"
-    "os"
-    "bufio"
-    "bytes"
+import (
+	"bufio"
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
+	"strings"
+
+	"github.com/gorilla/mux"
 )
 
 type Localfile struct {
-    Name string
-    IsFolder bool
+	Name     string
+	IsFolder bool
 }
 type Files struct {
-    Name string
-    Data string
+	Name string
+	Data string
 }
 
-func readfile(w http.ResponseWriter, r * http.Request) {
-    files := [] Files{}
+func readfile(w http.ResponseWriter, r *http.Request) {
+	files := []Files{}
 
-    vars := mux.Vars(r)
-    file := vars["file"];
+	vars := mux.Vars(r)
+	file := vars["file"]
 
-    file = strings.Replace(file, "slash", "/", 20)
- 
+	file = strings.Replace(file, "slash", "/", 20)
+
 	f, err := os.Open(file)
-	
+
 	if err != nil {
 		panic(err)
 	}
 	defer f.Close()
- 
+
 	wr := bytes.Buffer{}
 	sc := bufio.NewScanner(f)
 	for sc.Scan() {
 		wr.WriteString(sc.Text())
 	}
-    files = append(files, Files{file, wr.String()})
- 
-    json_data, err := json.Marshal(files)
+	files = append(files, Files{file, wr.String()})
 
-    if err != nil {
-        log.Fatal(err)
-    }
+	json_data, err := json.Marshal(files)
 
-    w.Header().Set("Content-Type", "application/json")
-    w.WriteHeader(http.StatusCreated)
-    json.NewEncoder(w).Encode(string(json_data))
- 
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(string(json_data))
+
 }
 
-func getFiles(w http.ResponseWriter, r * http.Request) {
-    localfiles := [] Localfile {}
+func getFiles(w http.ResponseWriter, r *http.Request) {
+	localfiles := []Localfile{}
 
-    vars := mux.Vars(r)
-    dir := vars["dir"];
+	vars := mux.Vars(r)
+	dir := vars["dir"]
 
-    res1 := strings.Replace(dir, "slash", "/", 20)
+	res1 := strings.Replace(dir, "slash", "/", 20)
 
-    files, err := ioutil.ReadDir(res1)
+	files, err := ioutil.ReadDir(res1)
 
-    for _, file := range files {
-        localfiles = append(localfiles, Localfile{file.Name(), file.IsDir()})
-    }
+	for _, file := range files {
+		localfiles = append(localfiles, Localfile{file.Name(), file.IsDir()})
+	}
 
-    json_data2, err := json.Marshal(localfiles)
+	json_data2, err := json.Marshal(localfiles)
 
-    if err != nil {
-        log.Fatal(err)
-    }
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    w.Header().Set("Content-Type", "application/json")
-    w.WriteHeader(http.StatusCreated)
-    json.NewEncoder(w).Encode(string(json_data2))
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(string(json_data2))
 }
 
 func main() {
-    fs := http.FileServer(http.Dir("./public"))
+	fs := http.FileServer(http.Dir("./public"))
 
-    router := mux.NewRouter()
+	router := mux.NewRouter()
 
-    router.HandleFunc(`/api/local_files/dir="{dir}"`, getFiles)
+	router.HandleFunc(`/api/local_files/dir="{dir}"`, getFiles)
 
-    router.HandleFunc(`/api/readfile/file="{file}"`, readfile)
+	router.HandleFunc(`/api/readfile/file="{file}"`, readfile)
 
-    router.HandleFunc(`/api/local_files`, getFiles)
+	router.HandleFunc(`/api/local_files`, getFiles)
 
+	http.Handle("/api/", router)
 
-    http.Handle("/api/", router)
+	http.Handle("/", fs)
 
-    http.Handle("/", fs)
-
-    fmt.Println("Server is listening...")
-    http.ListenAndServe(":3000", nil)
+	fmt.Println("Server is listening...")
+	http.ListenAndServe(":3000", nil)
 }
