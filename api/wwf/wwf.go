@@ -12,7 +12,7 @@ import (
 // File - Структура Файлов, Data поумолчанию должна быть пустой
 type File struct {
 	Name        string
-	isDirectory bool
+	IsDirectory bool
 	Data        string
 }
 
@@ -43,7 +43,7 @@ func (f *File) Open() {
 	file.Close()
 }
 
-// Delete - удаляет файл --> возвращает true в случае успешной смены имени, false в случае неудачи
+// Delete - удаляет файл --> возвращает true в случае удаления, false в случае неудачи
 func (f *File) Delete() bool {
 	err := os.Remove(f.Name)
 	if err != nil {
@@ -69,6 +69,17 @@ func RecordFile(fileName string) File {
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	return File{Name: file.Name(), isDirectory: file.IsDir()}
+	return File{Name: file.Name(), IsDirectory: file.IsDir()}
 }
+
+// CreateFile - создает новый файл <-- принимает имя файла --> возвращает true в случае создания, false в случае неудачи
+func CreateFile(name string) bool {
+	newFile, err := os.Create("test.txt")
+	if err != nil {
+			return false 
+	}
+	newFile.Close()
+	return true
+}
+
+
