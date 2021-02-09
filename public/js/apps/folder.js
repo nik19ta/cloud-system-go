@@ -71,19 +71,19 @@ function to_file(dir) {
                 document.querySelector('.app_folder').removeChild(document.querySelector('.app_folder').firstChild);
             }
 
-            for (let i = 0; i < JSON.parse(response).length; i++) {
+            for (let i = 0; i < JSON.parse(response)['Files'].length; i++) {
 
                 files = files + `
             <div 
             class='
-                ${JSON.parse(response)[i]['IsFolder'] ? "file_folder" : "file_no_folder"} 
+                ${JSON.parse(response)['Files'][i]['IsDirectory'] ? "file_folder" : "file_no_folder"} 
                 ${i % 2 == 0 ? 'bg_line' : 'fg_line'} line'
 
-            ${JSON.parse(response)[i]['IsFolder'] ? `onclick='to_file("${JSON.parse(response)[i]['Name']}")'` : `onclick='folder_open_file("${JSON.parse(response)[i]['Name']}")'` }>
+            ${JSON.parse(response)['Files'][i]['IsDirectory'] ? `onclick='to_file("${JSON.parse(response)['Files'][i]['Name']}")'` : `onclick='folder_open_file("${JSON.parse(response)['Files'][i]['Name']}")'` }>
 
-            <img class='image' src="${JSON.parse(response)[i]['IsFolder'] ?'../../images/res/folder/folder.png' : '../../images/res/folder/file.png'}" alt="">
+            <img class='image' src="${JSON.parse(response)['Files'][i]['IsDirectory'] ?'../../images/res/folder/folder.png' : '../../images/res/folder/file.png'}" alt="">
 
-            ${JSON.parse(response)[i]['Name']}
+            ${JSON.parse(response)['Files'][i]['Name']}
             </div>`
 
 
