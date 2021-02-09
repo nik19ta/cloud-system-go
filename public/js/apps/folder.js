@@ -108,7 +108,7 @@ function folder_open_file(filename) {
         .then(response => response.text())
         .then((response) => {
             response = JSON.parse(JSON.parse(response));
-            openReader(response[0]['Data'], response[0]['Name'])
+            openReader(response['Data'], response['Name'])
         })
         .catch(err => console.log(err))
 }

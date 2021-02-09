@@ -84,7 +84,7 @@ function app(app_name, show_in_dock, icon, width, height, change_size, title, ht
         app.style.paddingTop = '25px'
 
         let header = document.createElement('div')
-        header.className = 'header_app'
+        header.className = `header_app header_app_${app_name}`
         header.style.width = '100%'
         header.style.height = '25px'
         header.style.position = 'absolute'
@@ -98,8 +98,12 @@ function app(app_name, show_in_dock, icon, width, height, change_size, title, ht
         let expandDiv = document.createElement('div')
         expandDiv.className = 'expand'
         let app_nameDiv = document.createElement('div')
-        app_nameDiv.className = 'app_name'
-            // app_nameDiv.innerHTML = this.title
+        app_nameDiv.className = `app_name_${app_name}`
+            app_nameDiv.style.width = 'calc(100% - 100px)'
+            app_nameDiv.style.display = 'flex'
+            app_nameDiv.style.justifyContent = 'Center'
+            app_nameDiv.style.color = '#fff'
+            app_nameDiv.style.fontSize = '12px'
 
         header.appendChild(closeDiv)
         header.appendChild(rollupDiv)
@@ -117,12 +121,8 @@ function app(app_name, show_in_dock, icon, width, height, change_size, title, ht
 
         offset = offset + 30
         this.isopen = !this.isopen
-
-        if (callbackrender) {
-            callbackrender()
-        }
-
         drag(app, header)
+        if (callbackrender) callbackrender()
     }
     this.render_icon = function() { 
 
