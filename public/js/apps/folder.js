@@ -9,36 +9,8 @@ let url_folder = '..'
 
 
 
-
-fetch(URL + `/api/local_files/dir="${url_folder}"`, {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        method: "GET",
-    })
-    .then(response => response.text())
-    .then((response) => {
-        response = JSON.parse(response)
-
-
-        for (let i = 0; i < JSON.parse(response).length; i++) {
-
-            files = files + `
-            <div 
-            class='
-                ${JSON.parse(response)[i]['IsFolder'] ? "file_folder" : "file_no_folder"} 
-                ${i % 2 == 0 ? 'bg_line' : 'fg_line'} line'
-
-            ${JSON.parse(response)[i]['IsFolder'] ? `onclick='to_file("${JSON.parse(response)[i]['Name']}")'` : `onclick='folder_open_file("${JSON.parse(response)[i]['Name']}")'` }>
-
-            <img class='image' src="${JSON.parse(response)[i]['IsFolder'] ?'../../images/res/folder/folder.png' : '../../images/res/folder/file.png'}" alt="">
-
-            ${JSON.parse(response)[i]['Name']}
-            </div>`
-        }
-        folder = new app('folder', true, 'folder.png', 600, 400, false, 'Проводник', `
-            <div class="app_folder" ><div class="line back fg_line" onclick='to_file("..")' >. .</div> ${files}</div>
+folder = new app('folder', true, 'folder.png', 600, 400, false, 'Проводник', `
+            <div class="app_folder" >${files}</div>
                 
             <style>
             .app_folder{
@@ -76,14 +48,7 @@ fetch(URL + `/api/local_files/dir="${url_folder}"`, {
                 padding-left: 25px;
             }
             </style>
-    `)
-
-
-
-    })
-    .catch(err => console.log(err))
-
-
+    `, () => {to_file(url_folder)},  () => {to_file(url_folder)})
 
 function to_file(dir) {
     console.log(dir);
@@ -107,7 +72,7 @@ function to_file(dir) {
 
             for (let i = 0; i < JSON.parse(response).length; i++) {
 
-            files = files + `
+                files = files + `
             <div 
             class='
                 ${JSON.parse(response)[i]['IsFolder'] ? "file_folder" : "file_no_folder"} 
@@ -119,9 +84,9 @@ function to_file(dir) {
 
             ${JSON.parse(response)[i]['Name']}
             </div>`
-            
 
-            document.querySelector('.app_folder').innerHTML = files;
+
+                document.querySelector('.app_folder').innerHTML = files;
 
             }
         })
@@ -145,7 +110,7 @@ function folder_open_file(filename) {
             openReader(response[0]['Data'], response[0]['Name'])
         })
         .catch(err => console.log(err))
-}   
+}
 
 function openReader(data, name) {
     reader.callback(data, name)

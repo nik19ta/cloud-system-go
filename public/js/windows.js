@@ -53,7 +53,7 @@ let offset = 30;
 let apps = []
 
 
-function app(app_name, show_in_dock, icon, width, height, change_size, title, html, callback) {
+function app(app_name, show_in_dock, icon, width, height, change_size, title, html, callback, callbackrender) {
     this.width = width;
     this.height = height;
     this.show_in_dock = show_in_dock;
@@ -117,6 +117,11 @@ function app(app_name, show_in_dock, icon, width, height, change_size, title, ht
 
         offset = offset + 30
         this.isopen = !this.isopen
+
+        if (callbackrender) {
+            callbackrender()
+        }
+
         drag(app, header)
     }
     this.render_icon = function() { 
