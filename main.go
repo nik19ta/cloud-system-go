@@ -3,19 +3,14 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 
 	"github.com/gorilla/mux"
+
+	"github.com/nik19ta/go_server/api/wwd"
 	"github.com/nik19ta/go_server/api/wwf"
 )
-
-type Localfile struct {
-	Name     string
-	IsFolder bool
-}
 
 func readfile(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -34,38 +29,25 @@ func readfile(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func getFiles(w http.ResponseWriter, r *http.Request) {
-	localfiles := []Localfile{}
-
+func getfiles(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	dir := vars["dir"]
+	path := strings.Replace(dir, "slash", "/", 20)
 
-	res1 := strings.Replace(dir, "slash", "/", 20)
-
-	files, err := ioutil.ReadDir(res1)
-
-	for _, file := range files {
-		localfiles = append(localfiles, Localfile{file.Name(), file.IsDir()})
-	}
-
-	json_data2, err := json.Marshal(localfiles)
-
-	if err != nil {
-		log.Fatal(err)
-	}
+	files := wwd.RecordDir(path)
+	jsonfiles, _ := files.Send()
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(string(json_data2))
+	json.NewEncoder(w).Encode(string(jsonfiles))
 }
 
 func main() {
 	fs := http.FileServer(http.Dir("./public"))
 	router := mux.NewRouter()
 
-	router.HandleFunc(`/api/local_files/dir="{dir}"`, getFiles)
+	router.HandleFunc(`/api/local_files/dir="{dir}"`, getfiles)
 	router.HandleFunc(`/api/readfile/file="{file}"`, readfile)
-	router.HandleFunc(`/api/local_files`, getFiles)
 
 	http.Handle("/api/", router)
 	http.Handle("/", fs)
