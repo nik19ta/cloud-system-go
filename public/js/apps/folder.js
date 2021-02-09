@@ -48,7 +48,8 @@ folder = new app('folder', true, 'folder.png', 600, 400, false, 'Проводн�
                 padding-left: 25px;
             }
             </style>
-    `, () => {to_file(url_folder)},  () => {to_file(url_folder)})
+    `, () => {},  () => {to_file(url_folder)})
+
 
 function to_file(dir) {
     console.log(dir);

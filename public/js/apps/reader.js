@@ -19,5 +19,5 @@ reader = new app('reader', false, 'folder.png', 600, 400, false, 'reader', `
     `, function (data, name) {
         this.render()
         document.querySelector('.app_reader').innerHTML = data
-
+        document.querySelector('.app_name_reader').innerHTML = name;
     })
