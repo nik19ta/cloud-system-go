@@ -12,6 +12,7 @@ import (
 	"github.com/nik19ta/go_server/api/wwf"
 )
 
+// фукция которая отвечает за роут /api/local_files/dir="{dir}" / читает файл
 func readfile(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	filename := vars["file"]
@@ -29,6 +30,7 @@ func readfile(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// фукция которая отвечает за роут /api/readfile/file="{file}" / читает файлы в директории
 func getfiles(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	dir := vars["dir"]
