@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
+	"github.com/nik19ta/go_server/api/wwf"
 )
 
 type Localfile struct {
@@ -83,6 +84,7 @@ func getFiles(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+
 	fs := http.FileServer(http.Dir("./public"))
 
 	router := mux.NewRouter()
