@@ -165,22 +165,4 @@ function folder_open_file(filename) {
 
 function openReader(data, name) {
     reader.callback(data, name)
-    // let reader = document.createElement('div')
-    //     reader.innerHTML = data;
-    //     reader.className = 'ReaderApp';
-    //     reader.style.width = '500px';
-    //     reader.style.height = '500px';
-    //     reader.style.position = 'absolute';
-    //     reader.style.overflow = 'auto';
-    //     reader.style.background = '#202020';
-    //     reader.style.color = '#ffffff';
-    //     reader.style.padding = '10px';
-
-    //     drag(reader)
-    
-    // document.querySelector('body').appendChild(reader)
 }
-
-// file:///Users/nikitakhvatov/Desktop/dev/macoshtml/js/apps/folder.html
-
-// folder.render()

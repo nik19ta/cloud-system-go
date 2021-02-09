@@ -137,26 +137,3 @@ function app(app_name, show_in_dock, icon, width, height, change_size, title, ht
         this.render_icon()
     }
 }
-
-// function render_icons() {
-//     for (let i = 0; i < apps.length; i++) {
-//         console.log(apps[i]['icon']);
-
-//         let icon = document.createElement('img')
-//         icon.className = `icon_in_dock`
-//         icon.src = `./icons/${apps[i]['icon']}`
-//         icon.style.width = `34px`
-//         icon.style.height = `34px`
-//         icon.onclick = function() {
-//             eval(`${apps[i]['func']}()`)
-//         }
-
-//         dock.appendChild(icon)
-//     }
-// }
-
-// setTimeout(() => {
-//     render_icons()
-// }, 1000);
-
-// settingsApp.render()
