@@ -18,7 +18,7 @@ type File struct {
 * `Delete() -> true or false` - Удаляет файл
 * `Send() return []byte, bool` - возвращает структуру преобразованную в Json
 
-## wwd - Work with file
+## wwd - Work with dir
 
 ### Funcs:
 * `RecordDir(path string) return Dir` - Создает новый экземпляр Структуры Dir
