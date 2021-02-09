@@ -1,5 +1,5 @@
 ## wwf - Work with file
-*** 
+
 ### Funcs:
 * `RecordFile(fileName) return File` - Создает новый экземпляр Структуры File, с пустой Data
 * `CreateFile(name string) return true or false` - создает новый файл
@@ -19,7 +19,7 @@ type File struct {
 * `Send() return []byte, bool` - возвращает структуру преобразованную в Json
 
 ## wwd - Work with file
-*** 
+
 ### Funcs:
 * `RecordDir(path string) return Dir` - Создает новый экземпляр Структуры Dir
 * `CreateDir(name)` - создает новую папку
