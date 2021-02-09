@@ -28,7 +28,7 @@ fetch(URL + `/api/local_files/dir="${url_folder}"`, {
             <div 
             class='
                 ${JSON.parse(response)[i]['IsFolder'] ? "file_folder" : "file_no_folder"} 
-                ${i % 2 == 0 ? 'fg_line' : 'bg_line'} line'
+                ${i % 2 == 0 ? 'bg_line' : 'fg_line'} line'
 
             ${JSON.parse(response)[i]['IsFolder'] ? `onclick='to_file("${JSON.parse(response)[i]['Name']}")'` : `onclick='folder_open_file("${JSON.parse(response)[i]['Name']}")'` }>
 
@@ -38,7 +38,7 @@ fetch(URL + `/api/local_files/dir="${url_folder}"`, {
             </div>`
         }
         folder = new app('folder', true, 'folder.png', 600, 400, false, 'Проводник', `
-            <div class="app_folder" ><div class="line back bg_line" onclick='to_file("..")' >. .</div> ${files}</div>
+            <div class="app_folder" ><div class="line back fg_line" onclick='to_file("..")' >. .</div> ${files}</div>
                 
             <style>
             .app_folder{
@@ -70,8 +70,7 @@ fetch(URL + `/api/local_files/dir="${url_folder}"`, {
                 
             }
             .image{
-                width: 16px;
-                height: 16px;
+                width: 13px;
             }
             .back{
                 padding-left: 25px;
@@ -101,14 +100,7 @@ function to_file(dir) {
             response = JSON.parse(response)
             console.log(response);
 
-            // console.log(response.length === 0, 0);
-            // console.log(response.length === 2,2);
-            // if (response.length === 2) {
-            //     alert('Netь')
-            //     return
-            // }
-
-            files = `<div class="line back bg_line" onclick='to_file("..")'>. .</div>`
+            files = `<div class="line back fg_line" onclick='to_file("..")'>. .</div>`
             while (document.querySelector('.app_folder').firstChild) {
                 document.querySelector('.app_folder').removeChild(document.querySelector('.app_folder').firstChild);
             }
@@ -119,7 +111,7 @@ function to_file(dir) {
             <div 
             class='
                 ${JSON.parse(response)[i]['IsFolder'] ? "file_folder" : "file_no_folder"} 
-                ${i % 2 == 0 ? 'fg_line' : 'bg_line'} line'
+                ${i % 2 == 0 ? 'bg_line' : 'fg_line'} line'
 
             ${JSON.parse(response)[i]['IsFolder'] ? `onclick='to_file("${JSON.parse(response)[i]['Name']}")'` : `onclick='folder_open_file("${JSON.parse(response)[i]['Name']}")'` }>
 
@@ -127,15 +119,7 @@ function to_file(dir) {
 
             ${JSON.parse(response)[i]['Name']}
             </div>`
-
-            // files = files + `<div 
-            //     class='
-            //     ${JSON.parse(response)[i]['IsFolder'] ? "file_folder" : "file_no_folder"}  ${i % 2 == 0 ? 'fg_line' : 'bg_line'} line'
-            //     ${JSON.parse(response)[i]['IsFolder'] ? `onclick="to_file("${JSON.parse(response)[i]["Name"]}")` : `onclick="open(${JSON.parse(response)[i]["Name"]})` } 
-            //     >
-            //     <img class='image' src="${JSON.parse(response)[i]['IsFolder'] ?'../../images/res/folder/folder.png' : '../../images/res/folder/file.png'}" alt="">
-            //     ${JSON.parse(response)[i]['Name']}
-            //     </div>`
+            
 
             document.querySelector('.app_folder').innerHTML = files;
 
