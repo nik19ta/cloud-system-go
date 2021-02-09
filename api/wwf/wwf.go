@@ -1,9 +1,10 @@
-// Package wwf - Work With Files, ну я хз пока какое описание сделать, так что я думаю потом распишу 
+// Package wwf - Work With Files
 package wwf
 
 import (
 	"bufio"
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"os"
 )
@@ -15,7 +16,7 @@ type File struct {
 	Data        string
 }
 
-// Rename - Меняет имя файла <-- принимает полное, новое имя файла --> возвращает true в случае успешной смены имени, false в случае неудачи 
+// Rename - Меняет имя файла <-- принимает полное, новое имя файла --> возвращает true в случае успешной смены имени, false в случае неудачи
 func (f *File) Rename(newName string) bool {
 
 	err := os.Rename(f.Name, newName)
@@ -38,20 +39,29 @@ func (f *File) Open() {
 	for sc.Scan() {
 		wr.WriteString(sc.Text())
 	}
-	f.Data =  wr.String()
+	f.Data = wr.String()
 	file.Close()
 }
 
-// Delete - удаляет файл --> возвращает true в случае успешной смены имени, false в случае неудачи 
+// Delete - удаляет файл --> возвращает true в случае успешной смены имени, false в случае неудачи
 func (f *File) Delete() bool {
 	err := os.Remove(f.Name)
-    if err != nil {
-        return false
-    }
+	if err != nil {
+		return false
+	}
 	return true
 }
 
-// RecordFile - Создает новый экземпляр Структуры File, с пустой Data 
+// Send - --> возвращает структуру преобразованную в Json
+func (f *File) Send() ([]byte, bool) {
+	jsonFile, err := json.Marshal(f)
+	if err != nil {
+		return []byte("nil"), false
+	}
+	return jsonFile, true
+}
+
+// RecordFile - Создает новый экземпляр Структуры File, с пустой Data
 func RecordFile(fileName string) File {
 
 	file, err := os.Stat(fileName)
@@ -62,5 +72,3 @@ func RecordFile(fileName string) File {
 
 	return File{Name: file.Name(), isDirectory: file.IsDir()}
 }
-
-

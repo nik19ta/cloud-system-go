@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
+	"github.com/nik19ta/go_server/api/wwf"
 )
 
 type Localfile struct {
