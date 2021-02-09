@@ -2,10 +2,9 @@
 package wwf
 
 import (
-	"bufio"
-	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 )
 
@@ -28,19 +27,23 @@ func (f *File) Rename(newName string) bool {
 	return true
 }
 
-// Open - Заменяет путстую File.Data на содержимое файла (без \n)
+// Open - Заменяет путстую File.Data на содержимое файла c пробелами и переносами строк
 func (f *File) Open() {
 	file, err := os.Open(f.Name)
 	if err != nil {
 		fmt.Println(err)
 	}
-	wr := bytes.Buffer{}
-	sc := bufio.NewScanner(file)
-	for sc.Scan() {
-		wr.WriteString(sc.Text())
+	defer file.Close()
+	data := make([]byte, 64)
+	lines := ""
+	for {
+		n, err := file.Read(data)
+		if err == io.EOF {
+			break
+		}
+		lines = lines + string(data[:n])
 	}
-	f.Data = wr.String()
-	file.Close()
+	f.Data = lines
 }
 
 // Delete - удаляет файл --> возвращает true в случае удаления, false в случае неудачи
@@ -69,17 +72,15 @@ func RecordFile(fileName string) File {
 	if err != nil {
 		fmt.Println(err)
 	}
-	return File{Name: file.Name(), IsDirectory: file.IsDir()}
+	return File{Name: fileName, IsDirectory: file.IsDir()}
 }
 
 // CreateFile - создает новый файл <-- принимает имя файла --> возвращает true в случае создания, false в случае неудачи
 func CreateFile(name string) bool {
-	newFile, err := os.Create("test.txt")
+	newFile, err := os.Create(name)
 	if err != nil {
-			return false 
+		return false
 	}
 	newFile.Close()
 	return true
 }
-
-
