@@ -1,4 +1,4 @@
-## wwf - Work with file
+# wwf - Work with file
 
 ### Funcs:
 * `RecordFile(fileName) return File` - Создает новый экземпляр Структуры File, с пустой Data
@@ -20,7 +20,7 @@ type File struct {
 * `Delete() -> true or false` - Удаляет файл
 * `Send() return []byte, bool` - возвращает структуру преобразованную в Json
 
-## wwd - Work with dir
+# wwd - Work with dir
 
 ### Funcs:
 * `RecordDir(path string) return Dir` - Создает новый экземпляр Структуры Dir
@@ -37,3 +37,16 @@ type Dir struct {
 * `Rename(newName) return true or false` - Меняет имя папки
 * `Delete() -> true or false` - Удаляет папку
 * `Send() return []byte, bool` - Возвращает структуру преобразованную в Json
+
+# settings - Work with settings
+### Funcs:
+### use stract `Settings`:
+```go
+type Settings struct {
+	Keyboard  bool
+	DrowPhoto bool
+}
+```
+### `Settings` methods:
+* `Swipe(button)` - Эмитирует нажатие на ползунок
+* `Send() return []byte, bool` - возвращает структуру преобразованную в Json
