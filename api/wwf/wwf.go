@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
+	"log"
 	"os"
 )
 
@@ -62,6 +64,16 @@ func (f *File) Send() ([]byte, bool) {
 		return []byte("nil"), false
 	}
 	return jsonFile, true
+}
+
+//Write - перезаписывает содержимое файла, File.Data --> отдает его содержимое 
+func (f *File) Write(newFill string) string {
+	err := ioutil.WriteFile(f.Name, []byte(newFill), 64)
+	if err != nil {
+		log.Fatal(err)
+	}
+	f.Data = newFill
+	return f.Data
 }
 
 // RecordFile - Создает новый экземпляр Структуры File, с пустой Data

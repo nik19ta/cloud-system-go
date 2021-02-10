@@ -13,8 +13,10 @@ type File struct {
 }
 ```
 ### `File` methods
+* `Write(newFill) return File.Data` - Записывает новое содержимое в файл 
 * `Rename(newName) return true or false` - Переименовывает файл
 * `Open()` - Заменяет пустую File.Data на содержимое файла 
+*	`CreateFile(fileName) return File` - создает новый файл
 * `Delete() -> true or false` - Удаляет файл
 * `Send() return []byte, bool` - возвращает структуру преобразованную в Json
 
