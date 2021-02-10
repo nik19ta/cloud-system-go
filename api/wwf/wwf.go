@@ -87,12 +87,12 @@ func RecordFile(fileName string) File {
 	return File{Name: fileName, IsDirectory: file.IsDir()}
 }
 
-// CreateFile - создает новый файл <-- принимает имя файла --> возвращает true в случае создания, false в случае неудачи
-func CreateFile(name string) bool {
+// CreateFile - создает новый файл <-- принимает имя файла --> возвращает File, true в случае создания, false в случае неудачи
+func CreateFile(name string) (bool, File) {
 	newFile, err := os.Create(name)
 	if err != nil {
-		return false
+		return false, File{}
 	}
 	newFile.Close()
-	return true
+	return true, RecordFile(name)
 }
