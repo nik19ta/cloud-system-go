@@ -51,7 +51,8 @@ let folder = new app('folder', true, 'folder.png', 600, 400, false, 'Прово�
 folder.folder_open_file = (filename) => {
     let localpath = url_folder + 'slash' + filename;
     folder.getfetch(`/api/readfile/file="${localpath}"`, (r) => {
-        reader.callback(JSON.parse(JSON.parse(r))['Data'], JSON.parse(JSON.parse(r))['Name'])
+        // console.log(JSON.parse(r));
+        reader.callback(JSON.parse(r)['Data'], JSON.parse(r)['Name'])
     })
 
 }
