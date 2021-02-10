@@ -45,9 +45,6 @@ func getfiles(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	file := wwf.RecordFile("./text.txt")
-	file.Replace("Test text !")
-
 	fs := http.FileServer(http.Dir("./public"))
 	router := mux.NewRouter()
 
