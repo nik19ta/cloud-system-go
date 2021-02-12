@@ -55,6 +55,7 @@ func RecordDir(path string) Dir {
 	for _, file := range files {
 		dir.Files = append(dir.Files, wwf.File{Name: file.Name(), IsDirectory: file.IsDir()})
 	}
+	fmt.Println(dir.Name)
 	return dir
 }
 
