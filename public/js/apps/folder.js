@@ -1,5 +1,5 @@
 let files = ''
-let url_folder = '..slash..'
+let url_folder = 'open_folder'
 let lastcolor = ''
 
 
@@ -171,38 +171,39 @@ let folder = new app('folder', true, 'folder.png', 600, 400, false, 'Прово�
 })
 folder.folder_open_file = (filename) => {
     let sname = filename.split('.')[filename.split('.').length -1];
-    let localpath = url_folder + 'slash' + filename;
+    let localpath = url_folder + '/' + filename;
+    localpath = localpath.split('/').join('|')
 
     if (sname === 'png') {
     } else {
         folder.getfetch(`/api/readfile/file="${localpath}"`, (r) => {
             reader.callback(JSON.parse(r)['Data'], JSON.parse(r)['Name'])
+            console.log(JSON.parse(r));
         })
     }
 
 }
 folder.tofile = (dir) => {
+
+    console.log(dir);
+
     let app_folder = document.querySelector('.folder__files');
     
-    document.querySelector('.filepath').innerHTML = dir
-
-    console.log(url_folder);
-
-    if (url_folder.indexOf('..') === -1 || url_folder.indexOf('..') === 0) {
-        url_folder = url_folder + "slash" + dir;
-    } else {
-        if (dir === '..' && url_folder !== '..') {
-            url_folder = url_folder.substring(0, url_folder.length - url_folder.length);
-            url_folder = url_folder + dir;
-        } else {
-            url_folder = url_folder + "slash" + dir;
-        }
+    if (dir == "..") {
+        url_folder = url_folder.split("/").slice(0, -1).join("|");
+        console.log(url_folder);
+    } else if (dir != "open_folder")  {
+        url_folder = url_folder + '/' + dir
+        url_folder = url_folder.split("/").join("|");
     }
-
+    
 
     console.log('Запрос на', url_folder);
+
     folder.getfetch(`/api/local_files/dir="${url_folder}"`, (response) => {
-        console.log(JSON.parse(response));
+        url_folder = JSON.parse(response).Name
+        document.querySelector('.filepath').innerHTML = url_folder
+        console.log(url_folder);
         files = ``
         
         if (JSON.parse(response)['Files'] == null) {
@@ -255,16 +256,16 @@ folder.getfetch = (url, callback) => {
         .catch(err => console.log(err))
 }
 folder.set_active = (data) => {
-    if (document.querySelector(`.selected_line`) == null) {
-        document.querySelector(`.line_${data.replace(/\s/g, '')}`).className = document.querySelector(`.line_${data.replace(/\s/g, '')}`).className + " selected_line"
-        lastcolor = document.querySelector(`.line_${data.replace(/\s/g, '')}`).style.background;
-        document.querySelector(`.line_${data.replace(/\s/g, '')}`).style.background = "rgb(14, 91, 205)"
-    } else {
-        document.querySelector(`.selected_line`).style.background = lastcolor
-        document.querySelector(`.selected_line`).classList.remove("selected_line")
-        lastcolor = document.querySelector(`.line_${data.replace(/\s/g, '')}`).style.background;
-        document.querySelector(`.line_${data.replace(/\s/g, '')}`).className = document.querySelector(`.line_${data.replace(/\s/g, '')}`).className + " selected_line"
-    }
+    // if (document.querySelector(`.selected_line`) == null) {
+    //     // document.querySelector(`.line_${data.replace(/\s/g, '')}`).className = document.querySelector(`.line_${data.replace(/\s/g, '')}`).className + " selected_line"
+    //     lastcolor = document.querySelector(`.line_${data.replace(/\s/g, '')}`).style.background;
+    //     document.querySelector(`.line_${data.replace(/\s/g, '')}`).style.background = "rgb(14, 91, 205)"
+    // } else {
+    //     document.querySelector(`.selected_line`).style.background = lastcolor
+    //     document.querySelector(`.selected_line`).classList.remove("selected_line")
+    //     lastcolor = document.querySelector(`.line_${data.replace(/\s/g, '')}`).style.background;
+    //     document.querySelector(`.line_${data.replace(/\s/g, '')}`).className = document.querySelector(`.line_${data.replace(/\s/g, '')}`).className + " selected_line"
+    // }
 
 }
 folder.setimg = (name, type) => {

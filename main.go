@@ -17,7 +17,7 @@ func readfile(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	filename := vars["file"]
 
-	path := strings.Replace(filename, "slash", "/", 20)
+	path := strings.Replace(filename, "|", "/", 20)
 
 	file := wwf.RecordFile(path)
 
@@ -35,12 +35,12 @@ func getfiles(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	dir := vars["dir"]
 	var path string
-	if dir == "..slash.." {
+	if dir == "open_folder" {
 		path = wwd.TakeWorkDir()
 	} else {
-		path = strings.Replace(dir, "slash", "/", 20)
+		path = strings.Replace(dir, "|", "/", 20)
 	}
-
+	fmt.Println(path)
 	files := wwd.RecordDir(path)
 	jsonfiles, _ := files.Send()
 
@@ -54,7 +54,7 @@ func main() {
 	fs := http.FileServer(http.Dir("./public"))
 	router := mux.NewRouter()
 
-	router.HandleFunc(`/api/local_files/dir="{dir}"`, getfiles)
+	router.HandleFunc(`/api/local_files/dir="{dir}"`, getfiles) //
 	router.HandleFunc(`/api/readfile/file="{file}"`, readfile)
 
 	http.Handle("/api/", router)
