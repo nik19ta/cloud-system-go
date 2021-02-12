@@ -72,16 +72,17 @@ function app(app_name, show_in_dock, icon, width, height, change_size, title, ht
             return
         }
         let app = document.createElement('div')
-        app.className = this.title
+        app.className = `${this.title} window_app`
         app.id = this.title
         app.style.height = this.height + 'px'
         app.style.width = this.width + 'px'
-        app.style.background = '#fff'
         app.style.position = 'absolute'
         app.style.top = `${offset}px`
         app.style.left = `${offset}px`
         app.style.borderRadius = '8px'
         app.style.paddingTop = '25px'
+        app.style.border = 'solid 1px'
+        app.style.borderColor = 'rgba(236,236,236,0.22)'
 
         let header = document.createElement('div')
         header.className = `header_app header_app_${app_name}`
@@ -89,14 +90,16 @@ function app(app_name, show_in_dock, icon, width, height, change_size, title, ht
         header.style.height = '25px'
         header.style.position = 'absolute'
         header.style.top = '0px'
+        header.style.background = '#383838'
 
         let closeDiv = document.createElement('div')
         closeDiv.className = 'close'
+        closeDiv.style.background = '#E996B0'
         closeDiv.onclick = () => this.close_window()
-        let rollupDiv = document.createElement('div')
-        rollupDiv.className = 'rollup'
-        let expandDiv = document.createElement('div')
-        expandDiv.className = 'expand'
+        // let rollupDiv = document.createElement('div')
+        // rollupDiv.className = 'rollup'
+        // let expandDiv = document.createElement('div')
+        // expandDiv.className = 'expand'
         let app_nameDiv = document.createElement('div')
         app_nameDiv.className = `app_name_${app_name}`
             app_nameDiv.style.width = 'calc(100% - 100px)'
@@ -106,8 +109,8 @@ function app(app_name, show_in_dock, icon, width, height, change_size, title, ht
             app_nameDiv.style.fontSize = '12px'
 
         header.appendChild(closeDiv)
-        header.appendChild(rollupDiv)
-        header.appendChild(expandDiv)
+        // header.appendChild(rollupDiv)
+        // header.appendChild(expandDiv)
         header.appendChild(app_nameDiv)
 
         let content = document.createElement('div')
@@ -134,7 +137,6 @@ function app(app_name, show_in_dock, icon, width, height, change_size, title, ht
         elem_icon.onclick = function() {
             eval(`${app_name}.render()`)
         }
-
         dock.appendChild(elem_icon)
 
     }

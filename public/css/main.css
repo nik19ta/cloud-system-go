@@ -47,11 +47,12 @@ body {
 
     width: 100%;
     height: 25px;
-    background: rgba(32, 32, 32);
 
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    background: #1e1e1e;
 }
 
 .logo {
@@ -78,7 +79,7 @@ body {
     justify-content: flex-start;
     padding: 10px;
     align-items: center;
-    background-color: rgba(32, 32, 32);
+    /* background-color: #383838; */
     border-top-left-radius: 7.7px;
     border-top-right-radius: 7.7px;
     color: '#fff';
@@ -88,7 +89,6 @@ body {
     width: 13.5px;
     height: 13.5px;
     border-radius: 15px;
-    background-color: rgb(252, 96, 92);
 }
 
 .rollup {
@@ -145,4 +145,10 @@ body {
     overflow: auto;
     background: red;
     color: blue;
+
 }
+
+
+
+
+

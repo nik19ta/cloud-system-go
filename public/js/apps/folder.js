@@ -1,60 +1,274 @@
-let folder = {};
-
-const params = decodeURI(document.location.search);
-
-const URL = params.split('?')[0];
-
 let files = ''
-let url_folder = '..'
+let url_folder = 'open_folder'
+let lastcolor = ''
+
+
+const folder_html = `
+    <div class="app_folder" >
+        <div class="app_folder__header" >
+            <div class='left_block' >
+                <img  onclick='folder.tofile("..")' src='../../images/res/back.svg' class='back' />    
+                <img  onclick='folder.tofile("..")' src='../../images/res/back.svg' class='back backtoback' />    
+                <p class='filepath' ><p/>
+            </div>
+            <div class="rigth_block" >
+                <button class='app_folder__header_btn' >Create</button>
+                <button class='app_folder__header_btn' >Delete</button>
+                <button class='app_folder__header_btn' >Rename</button>
+            </div>
+        </div>
+        <div class="folder__files" >${files}</div>
+    </div>
+        
+    <style>
+    * {
+        user-select: none;
+    }
+   .app_folder {
+        box-sizing: border-box;
+        padding-bottom: 10px;
+        font-size: 12px;
+        color: #fff;
+        width: calc(600px - 2px);
+        height: calc(400px - 25px - 2px);
+        background-color: rgb(30, 30, 30);
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        aling-items: center;
+        flex-direction: row;
+        position: relative;
+   }
+   .app_folder__header_btn{
+        height: 18px;
+        padding-left: 10px;
+        padding-right: 10px;
+        background: #383838;
+        border: 0.5px solid rgba(75, 75, 75, 0.52);
+        box-sizing: border-box;
+        color: #FFFFFF;
+        border-radius: 4px;
+
+        font-family: Inter;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 11px;
+        font-family: inherit;
+        cursor: pointer;
+   }
+   .left_block{
+        width: 50%;
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        aling-items: center;
+        justify-content: flex-start;
+   }
+   .rigth_block{
+        padding-right: 15px;
+        width: 50%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 17px;
+   }
+   .filepath{
+        font-weight: bold;
+   }
+   .back {
+        width: 33px!important;
+        cursor: pointer;
+   }
+   
+   .backtoback {
+       transform: rotate(180deg);
+       margin-left: 13px;
+   }
+
+   .app_folder__header {
+       background: #262626;
+       border-radius: 0px;
+       height: 40px;
+       width: 100%;
+       position: absolute;
+       top: 0;
+       display: flex;
+       aling-items: center;
+   }
+
+   .folder__files {
+        padding-top: 10px;
+        margin-top: 40px;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        width: 100%;
+        overflow: auto;
+        max-height: 333px;
+        overflow: auto;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: flex-start;   
+        align-items: flex-start;
+        flex-flow: row wrap;
+        align-self: flex-start;
+        
+        gap: 22px;
+   }
+
+   .line {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+        width: 80px;
+        height: 80px;
+        backdorund-color: red;
+        border-radius: 4px;
+        padding: 2px;
+        flex-wrap: wrap;
+   }
+
+   .folder__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+   }
+
+   .image {
+        height: 50px;
+   }
+
+   .back {
+        padding-left: 25px;
+   }
+
+   .folder__filename {
+        width: 100%;
+        font-size: 10px;
+        margin-top: 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+   }
+
+   .center {
+        display: flex;
+        justify-content: center;
+   }
+
+    </style>
+    `
 
 
 
-folder = new app('folder', true, 'folder.png', 600, 400, false, 'Проводник', `
-            <div class="app_folder" >${files}</div>
-                
-            <style>
-            .app_folder{
-                width: 100%;
-                padding: 8px;
-                padding-bottom: 10px;
-                font-size: 12px;
-                color: #fff;
-                width: 600px;
-                height: calc(400px - 25px);
-                background-color: rgb(30, 30, 30);
-                border-bottom-left-radius: 8px;
-                border-bottom-right-radius: 8px;
-                overflow-y: auto;
-            }
-            .line{
-                display: flex;
-                align-items: center;
-                gap: 4px;
-                cursor: pointer;
-                width: 100%;
-                border-radius: 4px;
-                padding: 2px;
-            }
-            .bg_line{
-                background: rgb(41,41,41);
-            }
-            .fg_line{
-                
-            }
-            .image{
-                width: 13px;
-            }
-            .back{
-                padding-left: 25px;
-            }
-            </style>
-    `, () => {},  () => {to_file(url_folder)})
 
+let folder = new app('folder', true, 'folder.png', 600, 400, false, 'Проводник', folder_html, () => {}, () => {
+    folder.tofile(url_folder)
+})
+folder.folder_open_file = (filename) => {
+    let sname = filename.split('.')[filename.split('.').length -1];
+    let localpath = url_folder + '/' + filename;
+    localpath = localpath.split('/').join('|')
 
-function to_file(dir) {
+    if (sname === 'png') {
+    } else {
+        folder.getfetch(`/api/readfile/file="${localpath}"`, (r) => {
+            reader.callback(JSON.parse(r)['Data'], JSON.parse(r)['Name'])
+            console.log(JSON.parse(r));
+        })
+    }
+
+}
+
+folder.renameFile = (oldname, newname) => {
+    path = url_folder + '/' + oldname 
+    path = path.split('/').join('|')
+
+    folder.getfetch(`/api/renamefile/filepath="${path}",oldname="${oldname}",newname="${newname}""`, (response) => {
+        answer = JSON.parse(response)
+        // document.querySelector('.filepath').innerHTML = answer
+        console.log(answer);
+        // files = ``
+        
+        // if (JSON.parse(response)['Files'] == null) {
+        //     alert("Папка пустая")
+        // } 
+
+        // while (app_folder.firstChild) {
+        //     app_folder.removeChild(app_folder.firstChild);
+        // }
+
+        // console.log(JSON.parse(response)['Files'].length);
+        // for (let i = 0; i < JSON.parse(response)['Files'].length; i++) {
+        //     files = files + folder.elem(JSON.parse(response)['Files'][i], i)
+        // }
+        // app_folder.innerHTML = files;
+    })
+}
+
+folder.tofile = (dir) => {
+
     console.log(dir);
-    url_folder = url_folder + 'slash' + dir;
-    fetch(URL + `/api/local_files/dir="${url_folder}"`, {
+
+    let app_folder = document.querySelector('.folder__files');
+    
+    if (dir == "..") {
+        url_folder = url_folder.split("/").slice(0, -1).join("|");
+        console.log(url_folder);
+    } else if (dir != "open_folder")  {
+        url_folder = url_folder + '/' + dir
+        url_folder = url_folder.split("/").join("|");
+    }
+    
+
+    console.log('Запрос на', url_folder);
+
+    folder.getfetch(`/api/local_files/dir="${url_folder}"`, (response) => {
+        url_folder = JSON.parse(response).Name
+        document.querySelector('.filepath').innerHTML = url_folder
+        console.log(url_folder);
+        files = ``
+        
+        if (JSON.parse(response)['Files'] == null) {
+            alert("Папка пустая")
+        } 
+
+        while (app_folder.firstChild) {
+            app_folder.removeChild(app_folder.firstChild);
+        }
+
+        console.log(JSON.parse(response)['Files'].length);
+        for (let i = 0; i < JSON.parse(response)['Files'].length; i++) {
+            files = files + folder.elem(JSON.parse(response)['Files'][i], i)
+        }
+        app_folder.innerHTML = files;
+    })
+}
+
+folder.elem = (data, i) => {
+    return ` <div 
+        class='${data['IsDirectory'] ? "file_folder" : "file_no_folder"}  ${i % 2 == 0 ? 'bg_line' : 'fg_line'} line line_${data['Name'].replace(/\s/g, '')}'
+
+        ${data['IsDirectory'] ? `ondblclick='folder.tofile("${data['Name']}")'` : `ondblclick='folder.folder_open_file("${data['Name']}")'` }
+        ${`onclick='folder.set_active("${data['Name']}")'`}
+        
+        >
+
+        <div class='folder__icon' >
+        <img class='image' src="${folder.setimg(data['Name'], data['IsDirectory'])}" alt="">
+        </div>
+
+        <p class="folder__filename ${data['Name'].length < 15 ? 'center' : ''} " >${data['Name']}</p>
+
+        </div>`
+}
+// ${data['Name']}
+folder.getfetch = (url, callback) => {
+    fetch(`${url}`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -64,55 +278,56 @@ function to_file(dir) {
         .then(response => response.text())
         .then((response) => {
             response = JSON.parse(response)
-            console.log(response);
-
-            files = `<div class="line back fg_line" onclick='to_file("..")'>. .</div>`
-            while (document.querySelector('.app_folder').firstChild) {
-                document.querySelector('.app_folder').removeChild(document.querySelector('.app_folder').firstChild);
-            }
-
-            for (let i = 0; i < JSON.parse(response)['Files'].length; i++) {
-
-                files = files + `
-            <div 
-            class='
-                ${JSON.parse(response)['Files'][i]['IsDirectory'] ? "file_folder" : "file_no_folder"} 
-                ${i % 2 == 0 ? 'bg_line' : 'fg_line'} line'
-
-            ${JSON.parse(response)['Files'][i]['IsDirectory'] ? `onclick='to_file("${JSON.parse(response)['Files'][i]['Name']}")'` : `onclick='folder_open_file("${JSON.parse(response)['Files'][i]['Name']}")'` }>
-
-            <img class='image' src="${JSON.parse(response)['Files'][i]['IsDirectory'] ?'../../images/res/folder/folder.png' : '../../images/res/folder/file.png'}" alt="">
-
-            ${JSON.parse(response)['Files'][i]['Name']}
-            </div>`
-
-
-                document.querySelector('.app_folder').innerHTML = files;
-
-            }
+            callback(response)
         })
         .catch(err => console.log(err))
 }
+folder.set_active = (data) => {
+    // if (document.querySelector(`.selected_line`) == null) {
+    //     // document.querySelector(`.line_${data.replace(/\s/g, '')}`).className = document.querySelector(`.line_${data.replace(/\s/g, '')}`).className + " selected_line"
+    //     lastcolor = document.querySelector(`.line_${data.replace(/\s/g, '')}`).style.background;
+    //     document.querySelector(`.line_${data.replace(/\s/g, '')}`).style.background = "rgb(14, 91, 205)"
+    // } else {
+    //     document.querySelector(`.selected_line`).style.background = lastcolor
+    //     document.querySelector(`.selected_line`).classList.remove("selected_line")
+    //     lastcolor = document.querySelector(`.line_${data.replace(/\s/g, '')}`).style.background;
+    //     document.querySelector(`.line_${data.replace(/\s/g, '')}`).className = document.querySelector(`.line_${data.replace(/\s/g, '')}`).className + " selected_line"
+    // }
 
-function folder_open_file(filename) {
-    let localpathwithfile = url_folder + 'slash' + filename;
-    console.log(localpathwithfile);
-
-    fetch(URL + `/api/readfile/file="${localpathwithfile}"`, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: "GET",
-        })
-        .then(response => response.text())
-        .then((response) => {
-            response = JSON.parse(JSON.parse(response));
-            openReader(response['Data'], response['Name'])
-        })
-        .catch(err => console.log(err))
 }
+folder.setimg = (name, type) => {
+    let path = '../../images/res/folder';
+        if (name.indexOf('.') !== -1) {
 
-function openReader(data, name) {
-    reader.callback(data, name)
+        if (name.split('.')[name.split('.').length - 1] === 'zip') {
+            return `${path}/zip.png`
+        } else if (name.split('.')[name.split('.').length - 1] === 'go') {
+            return `${path}/golang.png`
+        } else if (name.split('.')[name.split('.').length - 1] === 'js') {
+            return `${path}/js_colors.png`
+        } else if (name.split('.')[name.split('.').length - 1] === 'html') {
+            return `${path}/html.png`
+        } else if (name.split('.')[name.split('.').length - 1] === 'css') {
+            return `${path}/css.png`
+        } else if (name.split('.')[name.split('.').length - 1] === 'py') {
+            return `${path}/godot_python.png`
+        } else if (name.split('.')[name.split('.').length - 1] === 'md') {
+            return `${path}/md.png`
+        } else if (name.split('.')[name.split('.').length - 1] === 'txt') {
+            return `${path}/file.png`
+        } 
+    }   
+
+    if (type) {
+        return `${path}/folder.png`
+    } else {
+        if (name.includes("git")) {
+            return `${path}/git.png`
+        } else if (name.indexOf('.') === -1) {
+            return `${path}/runfile.png`
+        }   else {
+            return `${path}/defoult.png`
+        }
+    }
+
 }
