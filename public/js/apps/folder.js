@@ -1,5 +1,5 @@
 let files = ''
-let url_folder = '.'
+let url_folder = '..slash..'
 let lastcolor = ''
 
 
@@ -202,12 +202,18 @@ folder.tofile = (dir) => {
 
     console.log('Запрос на', url_folder);
     folder.getfetch(`/api/local_files/dir="${url_folder}"`, (response) => {
+        console.log(JSON.parse(response));
         files = ``
+        
+        if (JSON.parse(response)['Files'] == null) {
+            alert("Папка пустая")
+        } 
 
         while (app_folder.firstChild) {
             app_folder.removeChild(app_folder.firstChild);
         }
 
+        console.log(JSON.parse(response)['Files'].length);
         for (let i = 0; i < JSON.parse(response)['Files'].length; i++) {
             files = files + folder.elem(JSON.parse(response)['Files'][i], i)
         }
