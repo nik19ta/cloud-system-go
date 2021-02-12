@@ -1,70 +1,158 @@
 let files = ''
 let url_folder = '..'
 let lastcolor = ''
+let lasfolder = '.'
 
 const folder_html = `
-    <div class="app_folder" >${files}</div>
+    <div class="app_folder" >
+        <div class="app_folder__header" >
+            <div class='left_block' >
+                <img  onclick='folder.tofile("..")' src='../../images/res/back.svg' class='back' />    
+                <img  onclick='folder.tofile(${lasfolder})' src='../../images/res/back.svg' class='back backtoback' />    
+                <p class='filepath' ><p/>
+            </div>
+            <div class="rigth_block" >
+                <button class='app_folder__header_btn' >Create</button>
+                <button class='app_folder__header_btn' >Delete</button>
+                <button class='app_folder__header_btn' >Rename</button>
+            </div>
+        </div>
+        <div class="folder__files" >${files}</div>
+    </div>
         
     <style>
-        .app_folder{
-            width: 100%;
-            padding: 8px;
-            padding-bottom: 10px;
-            font-size: 12px;
-            color: #fff;
-            width: 600px;
-            height: calc(400px - 25px);
-            background-color: rgb(30, 30, 30);
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
-            overflow-y: auto;
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: row;
-            gap: 20px;
-        }
-        .line{
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            width: 80px;
-            height: 80px;
-            backdorund: red;
-            border-radius: 4px;
-            padding: 2px;
-            flex-wrap: wrap;
-        }
-        .bg_line{
-            // background: rgb(41,41,41);
-        }
-        .fg_line{
-            // background: rgb(41,41,41);
-        }
-        .folder__icon{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-        }
-        .image{
-            height: 50px;
-        }
-        .back{
-            padding-left: 25px;
-        }
-        .folder__filename{
-            width: 100%;
-            font-size: 10px;
-            margin-top: 3px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .center {
-            display: flex;
-            justify-content: center;
-        }
+    
+   .app_folder {
+        box-sizing: border-box;
+        padding-bottom: 10px;
+        font-size: 12px;
+        color: #fff;
+        width: calc(600px - 2px);
+        height: calc(400px - 25px - 2px);
+        background-color: rgb(30, 30, 30);
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        aling-items: center;
+        flex-direction: row;
+        position: relative;
+   }
+   .app_folder__header_btn{
+        height: 18px;
+        padding-left: 10px;
+        padding-right: 10px;
+        background: #383838;
+        border: 0.5px solid rgba(75, 75, 75, 0.52);
+        box-sizing: border-box;
+        color: #FFFFFF;
+        border-radius: 4px;
+
+        font-family: Inter;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 11px;
+        font-family: inherit;
+   }
+   .left_block{
+        width: 50%;
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        aling-items: center;
+        justify-content: flex-start;
+   }
+   .rigth_block{
+        padding-right: 15px;
+        width: 50%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 17px;
+   }
+   .filepath{
+        font-weight: bold;
+   }
+   .back {
+        width: 33px!important;
+        cursor: pointer;
+   }
+   
+   .backtoback {
+       transform: rotate(180deg);
+       margin-left: 13px;
+   }
+
+   .app_folder__header {
+       background: #262626;
+       border-radius: 0px;
+       height: 40px;
+       width: 100%;
+       position: absolute;
+       top: 0;
+       display: flex;
+       aling-items: center;
+   }
+
+   .folder__files {
+        padding-top: 10px;
+        margin-top: 40px;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        width: 100%;
+        overflow: auto;
+        height: 333px;
+        overflow: auto;
+        display: flex;
+        flex-wrap: wrap;
+        aling-items: center;
+        flex-direction: row;
+        gap: 22px;
+   }
+
+   .line {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+        width: 80px;
+        height: 80px;
+        backdorund-color: red;
+        border-radius: 4px;
+        padding: 2px;
+        flex-wrap: wrap;
+   }
+
+   .folder__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+   }
+
+   .image {
+        height: 50px;
+   }
+
+   .back {
+        padding-left: 25px;
+   }
+
+   .folder__filename {
+        width: 100%;
+        font-size: 10px;
+        margin-top: 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+   }
+
+   .center {
+        display: flex;
+        justify-content: center;
+   }
+
     </style>
     `
 
@@ -82,18 +170,22 @@ folder.folder_open_file = (filename) => {
 
 }
 folder.tofile = (dir) => {
-    let app_folder = document.querySelector('.app_folder');
+    let app_folder = document.querySelector('.folder__files');
+    
+    document.querySelector('.filepath').innerHTML = dir
 
     if (dir === '..' && url_folder !== '..') {
+        lasfolder = url_folder + dir
         url_folder = url_folder.substring(0, url_folder.length - url_folder.length);
         url_folder = url_folder + dir;
     } else {
+        lasfolder = "."
         url_folder = url_folder + "slash" + dir;
     }
 
     console.log('Запрос на', url_folder);
     folder.getfetch(`/api/local_files/dir="${url_folder}"`, (response) => {
-        files = `<div class="line back fg_line" ondblclick='folder.tofile("..")'>. .</div>`
+        files = ``
 
         while (app_folder.firstChild) {
             app_folder.removeChild(app_folder.firstChild);
@@ -101,8 +193,8 @@ folder.tofile = (dir) => {
 
         for (let i = 0; i < JSON.parse(response)['Files'].length; i++) {
             files = files + folder.elem(JSON.parse(response)['Files'][i], i)
-            app_folder.innerHTML = files;
         }
+        app_folder.innerHTML = files;
     })
 }
 
@@ -122,8 +214,8 @@ folder.elem = (data, i) => {
         <p class="folder__filename ${data['Name'].length < 15 ? 'center' : ''} " >${data['Name']}</p>
 
         </div>`
-    }
-    // ${data['Name']}
+}
+// ${data['Name']}
 folder.getfetch = (url, callback) => {
     fetch(`${url}`, {
             headers: {
