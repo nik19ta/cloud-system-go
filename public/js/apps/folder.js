@@ -183,6 +183,33 @@ folder.folder_open_file = (filename) => {
     }
 
 }
+
+folder.renameFile = (dir, newname) => {
+    path = url_folder + '/' +dir
+    path = path.split('/').join('|')
+
+    folder.getfetch(`/api/renamefile/filepath="${path}", newname="${newname}"`, (response) => {
+        url_folder = JSON.parse(response).Name
+        document.querySelector('.filepath').innerHTML = url_folder
+        console.log(url_folder);
+        // files = ``
+        
+        // if (JSON.parse(response)['Files'] == null) {
+        //     alert("Папка пустая")
+        // } 
+
+        // while (app_folder.firstChild) {
+        //     app_folder.removeChild(app_folder.firstChild);
+        // }
+
+        // console.log(JSON.parse(response)['Files'].length);
+        // for (let i = 0; i < JSON.parse(response)['Files'].length; i++) {
+        //     files = files + folder.elem(JSON.parse(response)['Files'][i], i)
+        // }
+        // app_folder.innerHTML = files;
+    })
+}
+
 folder.tofile = (dir) => {
 
     console.log(dir);

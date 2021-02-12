@@ -15,6 +15,7 @@ import (
 //readfile - фукция которая отвечает за роут /api/local_files/dir="{dir}" / читает файл
 func readfile(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
+	fmt.Println(vars)
 	filename := vars["file"]
 
 	path := strings.Replace(filename, "|", "/", 20)
@@ -40,7 +41,6 @@ func getfiles(w http.ResponseWriter, r *http.Request) {
 	} else {
 		path = strings.Replace(dir, "|", "/", 20)
 	}
-	fmt.Println(path)
 	files := wwd.RecordDir(path)
 	jsonfiles, _ := files.Send()
 
@@ -49,13 +49,34 @@ func getfiles(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(string(jsonfiles))
 }
 
+func renamefile(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	filepath := vars["filepath"]
+	filepath = strings.Replace(filepath, "|", "/", 20)
+	newname := vars["newname"]
+
+	file := wwf.RecordFile(filepath)
+
+	file.Rename(newname)
+
+	// file = wwf.RecordFile()
+
+	jsonfile, _ := file.Send()
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(string(jsonfile))
+	
+}
+
 func main() {
 
 	fs := http.FileServer(http.Dir("./public"))
 	router := mux.NewRouter()
 
-	router.HandleFunc(`/api/local_files/dir="{dir}"`, getfiles) //
+	router.HandleFunc(`/api/local_files/dir="{dir}"`, getfiles) 
 	router.HandleFunc(`/api/readfile/file="{file}"`, readfile)
+	router.HandleFunc(`/api/renamefile/filepath="{filepath}", newname="{newname}"`, renamefile)
 
 	http.Handle("/api/", router)
 	http.Handle("/", fs)
