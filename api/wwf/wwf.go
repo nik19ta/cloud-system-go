@@ -80,14 +80,14 @@ func (f *File) Write(newFill string) string {
 }
 
 // RecordFile - Создает новый экземпляр Структуры File, с пустой Data
-func RecordFile(fileName string) File {
+func RecordFile(fileName string) (File, bool) {
 
 	file, err := os.Stat(fileName)
 
 	if err != nil {
-		fmt.Println(err)
+		return File{}, false
 	}
-	return File{Name: fileName, IsDirectory: file.IsDir(), Size: file.Size(), ModTime: file.ModTime()}
+	return File{Name: fileName, IsDirectory: file.IsDir(), Size: file.Size(), ModTime: file.ModTime()}, true
 }
 
 // CreateFile - создает новый файл <-- принимает имя файла --> возвращает File, true в случае создания, false в случае неудачи
@@ -97,5 +97,6 @@ func CreateFile(name string) (bool, File) {
 		return false, File{}
 	}
 	newFile.Close()
-	return true, RecordFile(name)
+	file, _ := RecordFile(name)
+	return true, file
 }

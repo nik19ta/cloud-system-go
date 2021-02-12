@@ -8,6 +8,7 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"github.com/nik19ta/go_server/api/operation"
 	"github.com/nik19ta/go_server/api/wwd"
 	"github.com/nik19ta/go_server/api/wwf"
 )
@@ -20,7 +21,7 @@ func readfile(w http.ResponseWriter, r *http.Request) {
 
 	path := strings.Replace(filename, "|", "/", 20)
 
-	file := wwf.RecordFile(path)
+	file, _ := wwf.RecordFile(path)
 
 	file.Open()
 	jsonfile, _ := file.Send()
@@ -49,24 +50,35 @@ func getfiles(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(string(jsonfiles))
 }
 
+// renamefile - фукция которая отвечает за роут /api/renamefile/filepath="{filepath}",oldname="{oldname}",newname="{newname}" / меняет имя файла
 func renamefile(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
+
+	newname := vars["newname"]
+	oldname := vars["oldname"]
 	filepath := vars["filepath"]
 	filepath = strings.Replace(filepath, "|", "/", 20)
-	newname := vars["newname"]
 
-	file := wwf.RecordFile(filepath)
+	file, _ := wwf.RecordFile(filepath)
 
-	file.Rename(newname)
+	var oper operation.Operation
+	
+	err := file.Rename(newname)
+	
+	if err == false {
+		oper = operation.Record(err, file)
+	} else {
+		newFilePath := strings.Replace(file.Name, oldname, newname, 1)
+		file, _ = wwf.RecordFile(newFilePath)
+		oper = operation.Record(true, file)
+	}
 
-	// file = wwf.RecordFile()
-
-	jsonfile, _ := file.Send()
+	jsonfile, _ := oper.Send()
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(string(jsonfile))
-	
+
 }
 
 func main() {
@@ -74,9 +86,9 @@ func main() {
 	fs := http.FileServer(http.Dir("./public"))
 	router := mux.NewRouter()
 
-	router.HandleFunc(`/api/local_files/dir="{dir}"`, getfiles) 
+	router.HandleFunc(`/api/local_files/dir="{dir}"`, getfiles)
 	router.HandleFunc(`/api/readfile/file="{file}"`, readfile)
-	router.HandleFunc(`/api/renamefile/filepath="{filepath}", newname="{newname}"`, renamefile)
+	router.HandleFunc(`/api/renamefile/filepath="{filepath}",oldname="{oldname}",newname="{newname}"`, renamefile)
 
 	http.Handle("/api/", router)
 	http.Handle("/", fs)

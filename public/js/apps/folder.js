@@ -184,14 +184,14 @@ folder.folder_open_file = (filename) => {
 
 }
 
-folder.renameFile = (dir, newname) => {
-    path = url_folder + '/' +dir
+folder.renameFile = (oldname, newname) => {
+    path = url_folder + '/' + oldname 
     path = path.split('/').join('|')
 
-    folder.getfetch(`/api/renamefile/filepath="${path}", newname="${newname}"`, (response) => {
-        url_folder = JSON.parse(response).Name
-        document.querySelector('.filepath').innerHTML = url_folder
-        console.log(url_folder);
+    folder.getfetch(`/api/renamefile/filepath="${path}",oldname="${oldname}",newname="${newname}""`, (response) => {
+        answer = JSON.parse(response)
+        // document.querySelector('.filepath').innerHTML = answer
+        console.log(answer);
         // files = ``
         
         // if (JSON.parse(response)['Files'] == null) {
