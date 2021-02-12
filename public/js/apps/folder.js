@@ -1,14 +1,14 @@
 let files = ''
-let url_folder = '..'
+let url_folder = '.'
 let lastcolor = ''
-let lasfolder = '.'
+
 
 const folder_html = `
     <div class="app_folder" >
         <div class="app_folder__header" >
             <div class='left_block' >
                 <img  onclick='folder.tofile("..")' src='../../images/res/back.svg' class='back' />    
-                <img  onclick='folder.tofile(${lasfolder})' src='../../images/res/back.svg' class='back backtoback' />    
+                <img  onclick='folder.tofile("..")' src='../../images/res/back.svg' class='back backtoback' />    
                 <p class='filepath' ><p/>
             </div>
             <div class="rigth_block" >
@@ -21,7 +21,9 @@ const folder_html = `
     </div>
         
     <style>
-    
+    * {
+        user-select: none;
+    }
    .app_folder {
         box-sizing: border-box;
         padding-bottom: 10px;
@@ -53,6 +55,7 @@ const folder_html = `
         font-weight: normal;
         font-size: 11px;
         font-family: inherit;
+        cursor: pointer;
    }
    .left_block{
         width: 50%;
@@ -102,12 +105,16 @@ const folder_html = `
         border-bottom-right-radius: 8px;
         width: 100%;
         overflow: auto;
-        height: 333px;
+        max-height: 333px;
         overflow: auto;
         display: flex;
         flex-wrap: wrap;
-        aling-items: center;
         flex-direction: row;
+        justify-content: flex-start;   
+        align-items: flex-start;
+        flex-flow: row wrap;
+        align-self: flex-start;
+        
         gap: 22px;
    }
 
@@ -163,10 +170,15 @@ let folder = new app('folder', true, 'folder.png', 600, 400, false, 'Прово�
     folder.tofile(url_folder)
 })
 folder.folder_open_file = (filename) => {
+    let sname = filename.split('.')[filename.split('.').length -1];
     let localpath = url_folder + 'slash' + filename;
-    folder.getfetch(`/api/readfile/file="${localpath}"`, (r) => {
-        reader.callback(JSON.parse(r)['Data'], JSON.parse(r)['Name'])
-    })
+
+    if (sname === 'png') {
+    } else {
+        folder.getfetch(`/api/readfile/file="${localpath}"`, (r) => {
+            reader.callback(JSON.parse(r)['Data'], JSON.parse(r)['Name'])
+        })
+    }
 
 }
 folder.tofile = (dir) => {
@@ -174,14 +186,19 @@ folder.tofile = (dir) => {
     
     document.querySelector('.filepath').innerHTML = dir
 
-    if (dir === '..' && url_folder !== '..') {
-        lasfolder = url_folder + dir
-        url_folder = url_folder.substring(0, url_folder.length - url_folder.length);
-        url_folder = url_folder + dir;
-    } else {
-        lasfolder = "."
+    console.log(url_folder);
+
+    if (url_folder.indexOf('..') === -1 || url_folder.indexOf('..') === 0) {
         url_folder = url_folder + "slash" + dir;
+    } else {
+        if (dir === '..' && url_folder !== '..') {
+            url_folder = url_folder.substring(0, url_folder.length - url_folder.length);
+            url_folder = url_folder + dir;
+        } else {
+            url_folder = url_folder + "slash" + dir;
+        }
     }
+
 
     console.log('Запрос на', url_folder);
     folder.getfetch(`/api/local_files/dir="${url_folder}"`, (response) => {
@@ -237,7 +254,6 @@ folder.set_active = (data) => {
         lastcolor = document.querySelector(`.line_${data.replace(/\s/g, '')}`).style.background;
         document.querySelector(`.line_${data.replace(/\s/g, '')}`).style.background = "rgb(14, 91, 205)"
     } else {
-        console.log(1);
         document.querySelector(`.selected_line`).style.background = lastcolor
         document.querySelector(`.selected_line`).classList.remove("selected_line")
         lastcolor = document.querySelector(`.line_${data.replace(/\s/g, '')}`).style.background;
@@ -248,8 +264,6 @@ folder.set_active = (data) => {
 folder.setimg = (name, type) => {
     let path = '../../images/res/folder';
     if (name.indexOf('.') !== -1) {
-        console.log(name.split('.')[name.split('.').length - 1]);
-
         if (name.split('.')[name.split('.').length - 1] === 'zip') {
             return `${path}/zip.png`
         } else if (name.split('.')[name.split('.').length - 1] === 'go') {

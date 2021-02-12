@@ -51,6 +51,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    background: #1e1e1e;
 }
 
 .logo {
@@ -144,9 +146,6 @@ body {
     background: red;
     color: blue;
 
-
-    
-    
 }
 
 
