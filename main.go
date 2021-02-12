@@ -34,7 +34,12 @@ func readfile(w http.ResponseWriter, r *http.Request) {
 func getfiles(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	dir := vars["dir"]
-	path := strings.Replace(dir, "slash", "/", 20)
+	var path string
+	if dir == "..slash.." {
+		path = wwd.TakeWorkDir()
+	} else {
+		path = strings.Replace(dir, "slash", "/", 20)
+	}
 
 	files := wwd.RecordDir(path)
 	jsonfiles, _ := files.Send()

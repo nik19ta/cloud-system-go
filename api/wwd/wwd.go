@@ -55,11 +55,19 @@ func RecordDir(path string) Dir {
 	for _, file := range files {
 		dir.Files = append(dir.Files, wwf.File{Name: file.Name(), IsDirectory: file.IsDir()})
 	}
-	fmt.Println(dir.Name)
 	return dir
 }
 
 // CreateDir - создает новую папку <-- принимает имя папки --> возвращает true в случае создания, false в случае неудачи
 func CreateDir(name string) {
 	os.MkdirAll(name, os.ModePerm)
+}
+
+// TakeWorkDir - возвращает рабочюю дирикторию
+func TakeWorkDir() string {
+	dir, err := os.Getwd()
+	if err != nil {
+		fmt.Println("Error")
+	}
+	return dir
 }
