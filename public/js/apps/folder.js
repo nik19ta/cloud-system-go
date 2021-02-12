@@ -270,18 +270,37 @@ folder.set_active = (data) => {
 }
 folder.setimg = (name, type) => {
     let path = '../../images/res/folder';
-    if (name.indexOf('.') !== -1) {
+        if (name.indexOf('.') !== -1) {
+
         if (name.split('.')[name.split('.').length - 1] === 'zip') {
             return `${path}/zip.png`
         } else if (name.split('.')[name.split('.').length - 1] === 'go') {
             return `${path}/golang.png`
-        }
-    }
+        } else if (name.split('.')[name.split('.').length - 1] === 'js') {
+            return `${path}/js_colors.png`
+        } else if (name.split('.')[name.split('.').length - 1] === 'html') {
+            return `${path}/html.png`
+        } else if (name.split('.')[name.split('.').length - 1] === 'css') {
+            return `${path}/css.png`
+        } else if (name.split('.')[name.split('.').length - 1] === 'py') {
+            return `${path}/godot_python.png`
+        } else if (name.split('.')[name.split('.').length - 1] === 'md') {
+            return `${path}/md.png`
+        } else if (name.split('.')[name.split('.').length - 1] === 'txt') {
+            return `${path}/file.png`
+        } 
+    }   
 
     if (type) {
         return `${path}/folder.png`
     } else {
-        return `${path}/file.png`
+        if (name.includes("git")) {
+            return `${path}/git.png`
+        } else if (name.indexOf('.') === -1) {
+            return `${path}/runfile.png`
+        }   else {
+            return `${path}/defoult.png`
+        }
     }
 
 }
