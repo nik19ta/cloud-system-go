@@ -10,6 +10,8 @@ type File struct {
 	Name        string
 	IsDirectory bool
 	Data        string
+	Size        int64
+	ModTime     time.Time
 }
 ```
 ### `File` methods

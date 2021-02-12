@@ -45,6 +45,7 @@ func getfiles(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+
 	fs := http.FileServer(http.Dir("./public"))
 	router := mux.NewRouter()
 
