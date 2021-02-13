@@ -2,6 +2,8 @@ let files = ''
 let url_folder = 'open_folder'
 let lastcolor = ''
 
+let classNameDiv = ''
+// класс выбронного жлемента
 
 const folder_html = `
     <div class="app_folder" >
@@ -14,7 +16,7 @@ const folder_html = `
             <div class="rigth_block" >
                 <button class='app_folder__header_btn' >Create</button>
                 <button class='app_folder__header_btn' >Delete</button>
-                <button class='app_folder__header_btn' >Rename</button>
+                <button class='app_folder__header_btn' onclick='folder.btn_rename()' >Rename</button>
             </div>
         </div>
         <div class="folder__files" >${files}</div>
@@ -172,12 +174,11 @@ let folder = new app('folder', true, 'folder.png', 600, 400, false, 'Прово�
     url_folder = 'open_folder'
 })
 folder.folder_open_file = (filename) => {
-    let sname = filename.split('.')[filename.split('.').length -1];
+    let sname = filename.split('.')[filename.split('.').length - 1];
     let localpath = url_folder + '/' + filename;
     localpath = localpath.split('/').join('|')
 
-    if (sname === 'png') {
-    } else {
+    if (sname === 'png') {} else {
         folder.getfetch(`/api/readfile/file="${localpath}"`, (r) => {
             reader.callback(JSON.parse(r)['Data'], JSON.parse(r)['Name'])
             console.log(JSON.parse(r));
@@ -187,7 +188,7 @@ folder.folder_open_file = (filename) => {
 }
 
 folder.renameFile = (oldname, newname) => {
-    path = url_folder + '/' + oldname 
+    path = url_folder + '/' + oldname
     path = path.split('/').join('|')
 
     folder.getfetch(`/api/renamefile/filepath="${path}",oldname="${oldname}",newname="${newname}""`, (response) => {
@@ -195,7 +196,7 @@ folder.renameFile = (oldname, newname) => {
         // document.querySelector('.filepath').innerHTML = answer
         console.log(answer);
         // files = ``
-        
+
         // if (JSON.parse(response)['Files'] == null) {
         //     alert("Папка пустая")
         // } 
@@ -217,35 +218,39 @@ folder.tofile = (dir) => {
     console.log(dir);
 
     let app_folder = document.querySelector('.folder__files');
-    
+
     if (dir == "..") {
         url_folder = url_folder.split("/").slice(0, -1).join("|");
         console.log(url_folder);
-    } else if (dir != "open_folder")  {
+    } else if (dir != "open_folder") {
         url_folder = url_folder + '/' + dir
         url_folder = url_folder.split("/").join("|");
     }
-    
+
 
     console.log('Запрос на', url_folder);
 
     folder.getfetch(`/api/local_files/dir="${url_folder}"`, (response) => {
         url_folder = JSON.parse(response).Name
 
+        let local_path = url_folder;
 
-        // if (condition) {
-            
-        // }
+        console.log("lennnn", local_path.length);
 
-        console.log('len', url_folder.length); 
+        console.log('-----------_');
+        console.log(local_path.length > 50);
+        if (local_path.length > 50) {
+            console.log(local_path.split('/').splice(0));
+            local_path.split('/').splice(0, 1).join('/');
+        }
+        document.querySelector('.filepath').innerHTML = local_path
+        console.log('-----------_');
 
-        document.querySelector('.filepath').innerHTML = url_folder
-        console.log(url_folder);
         files = ``
-        
+
         if (JSON.parse(response)['Files'] == null) {
             alert("Папка пустая")
-        } 
+        }
 
         while (app_folder.firstChild) {
             app_folder.removeChild(app_folder.firstChild);
@@ -261,7 +266,7 @@ folder.tofile = (dir) => {
 
 folder.elem = (data, i) => {
     return ` <div 
-        class='${data['IsDirectory'] ? "file_folder" : "file_no_folder"}  ${i % 2 == 0 ? 'bg_line' : 'fg_line'} line line_${data['Name'].replace(/\s/g, '')}'
+        class='${data['IsDirectory'] ? "file_folder" : "file_no_folder"}  ${i % 2 == 0 ? 'bg_line' : 'fg_line'} line line_${data['Name'].replace(/\s/g, '').replace(/\./g, "__")}'
 
         ${data['IsDirectory'] ? `ondblclick='folder.tofile("${data['Name']}")'` : `ondblclick='folder.folder_open_file("${data['Name']}")'` }
         ${`onclick='folder.set_active("${data['Name']}")'`}
@@ -272,7 +277,7 @@ folder.elem = (data, i) => {
         <img class='image' src="${folder.setimg(data['Name'], data['IsDirectory'])}" alt="">
         </div>
 
-        <p class="folder__filename ${data['Name'].length < 15 ? 'center' : ''} " >${data['Name']}</p>
+        <p class='folder__filename ${data["Name"].length < 15 ? "center" : ""}  line_${data["Name"].replace(/\s/g, "").replace(/\./g, "__")}_text' >${data["Name"]}</p>
 
         </div>`
 }
@@ -294,46 +299,65 @@ folder.getfetch = (url, callback) => {
 }
 folder.set_active = (data) => {
     console.log('oncklick', data);
+
+    classNameDiv = `.line_${data.replace(/\s/g, '').replace(/\./g, "__")}_text`
+}
+folder.test = (e) => {
+    e.preventDefault();
+    console.log(1234);
+}
+folder.btn_rename = () => {
+    console.log(12345);
+    let last_name = document.querySelector(classNameDiv).innerHTML;
+    document.querySelector(classNameDiv).innerHTML = `
+    <form id='renameinp' ><input  type="text" class="input_rename" placeholder="${last_name}" ></form>
+
+    <style>    
+    .input_rename {
+        width: 50px;
+        background: #0003;
+        color: #fff;
+        border: 0;
+        border-radius: 4px;
+        padding: 4px;
+    }
+    </style>
+    `
+
+document.querySelector('#renameinp').addEventListener('submit', function(e){
+    e.preventDefault();
+    console.log('!!!!');
+})
 }
 folder.setimg = (name, type) => {
     let path = '../../images/res/folder';
-        if (name.indexOf('.') !== -1) {
+    if (name.indexOf('.') !== -1) {
 
-        if (name.split('.')[name.split('.').length - 1] === 'zip') {
-            return `${path}/zip.png`
-        } else if (name.split('.')[name.split('.').length - 1] === 'go') {
-            return `${path}/golang.png`
-        } else if (name.split('.')[name.split('.').length - 1] === 'js') {
-            return `${path}/js_colors.png`
-        } else if (name.split('.')[name.split('.').length - 1] === 'html') {
-            return `${path}/html.png`
-        } else if (name.split('.')[name.split('.').length - 1] === 'css') {
-            return `${path}/css.png`
-        } else if (name.split('.')[name.split('.').length - 1] === 'py') {
-            return `${path}/godot_python.png`
-        } else if (name.split('.')[name.split('.').length - 1] === 'md') {
-            return `${path}/md.png`
-        } else if (name.split('.')[name.split('.').length - 1] === 'txt') {
-            return `${path}/file.png`
-        } else if (name.split('.')[name.split('.').length - 1] === 'json') {
-            return `${path}/json.png`
-        } else if (name.split('.')[name.split('.').length - 1] === 'png') {
-            return `${path}/png.png`
-        } else if (name.split('.')[name.split('.').length - 1] === 'jpg' || name.split('.')[name.split('.').length - 1] === 'jpeg') {
-            return `${path}/jpg.png`
-        } 
-    }   
+        if (name.split('.')[name.split('.').length - 1] === 'zip') return `${path}/zip.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'go') return `${path}/golang.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'js') return `${path}/js_colors.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'html') return `${path}/html.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'css') return `${path}/css.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'py') return `${path}/godot_python.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'md') return `${path}/md.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'txt') return `${path}/file.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'json') return `${path}/json.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'png') return `${path}/png.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'jpg' || name.split('.')[name.split('.').length - 1] === 'jpeg') return `${path}/jpg.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'csv') return `${path}/CSV.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'mov') return `${path}/mov.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'mp3') return `${path}/mp3.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'mp4') return `${path}/mp4.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'ts') return `${path}/ts.png`
+    }
 
     if (type) {
         return `${path}/folder.png`
     } else {
-        if (name.includes("git")) {
-            return `${path}/git.png`
-        } else if (name.indexOf('.') === -1) {
-            return `${path}/runfile.png`
-        }   else {
-            return `${path}/defoult.png`
-        }
+        if (name.includes("git")) return `${path}/git.png`
+        else if (name.indexOf('.') === -1) return `${path}/runfile.png`
+        else return `${path}/defoult.png`
     }
 
 }
+
