@@ -62,9 +62,9 @@ func renamefile(w http.ResponseWriter, r *http.Request) {
 	file, _ := wwf.RecordFile(filepath)
 
 	var oper operation.Operation
-	
+
 	err := file.Rename(newname)
-	
+
 	if err == false {
 		oper = operation.Record(err, file)
 	} else {

@@ -1,3 +1,9 @@
+# wwz - Work with zip
+
+### Funcs:
+* Unzip(filename) - создает папку(с таким же именем как и у zip архива) и распаковывает туда zip
+* ZipFiles(zipname, files) - упаковывает файлы в zip
+
 # wwf - Work with file
 
 ### Funcs:
