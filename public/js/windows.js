@@ -53,7 +53,7 @@ let offset = 30;
 let apps = []
 
 
-function app(app_name, show_in_dock, icon, width, height, change_size, title, html, callback, callbackrender) {
+function app(app_name, show_in_dock, icon, width, height, change_size, title, html, callback, callbackrender, callbask_in_close) {
     this.width = width;
     this.height = height;
     this.show_in_dock = show_in_dock;
@@ -65,6 +65,9 @@ function app(app_name, show_in_dock, icon, width, height, change_size, title, ht
     this.close_window = function() {
         document.querySelector(`.${this.title}`).remove()
         offset = offset - 30
+        if (callbask_in_close) {
+            callbask_in_close()
+        }
         this.isopen = !this.isopen
     }
     this.render = function() {

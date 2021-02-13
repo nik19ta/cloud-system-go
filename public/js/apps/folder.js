@@ -61,7 +61,7 @@ const folder_html = `
         width: 50%;
         height: 100%;
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         aling-items: center;
         justify-content: flex-start;
    }
@@ -159,15 +159,17 @@ const folder_html = `
         display: flex;
         justify-content: center;
    }
-
+   .filepath{
+        white-space: nowrap;   
+   }
     </style>
     `
 
 
-
-
 let folder = new app('folder', true, 'folder.png', 600, 400, false, 'Проводник', folder_html, () => {}, () => {
     folder.tofile(url_folder)
+}, () => {
+    url_folder = 'open_folder'
 })
 folder.folder_open_file = (filename) => {
     let sname = filename.split('.')[filename.split('.').length -1];
@@ -229,6 +231,14 @@ folder.tofile = (dir) => {
 
     folder.getfetch(`/api/local_files/dir="${url_folder}"`, (response) => {
         url_folder = JSON.parse(response).Name
+
+
+        // if (condition) {
+            
+        // }
+
+        console.log('len', url_folder.length); 
+
         document.querySelector('.filepath').innerHTML = url_folder
         console.log(url_folder);
         files = ``
@@ -283,17 +293,7 @@ folder.getfetch = (url, callback) => {
         .catch(err => console.log(err))
 }
 folder.set_active = (data) => {
-    // if (document.querySelector(`.selected_line`) == null) {
-    //     // document.querySelector(`.line_${data.replace(/\s/g, '')}`).className = document.querySelector(`.line_${data.replace(/\s/g, '')}`).className + " selected_line"
-    //     lastcolor = document.querySelector(`.line_${data.replace(/\s/g, '')}`).style.background;
-    //     document.querySelector(`.line_${data.replace(/\s/g, '')}`).style.background = "rgb(14, 91, 205)"
-    // } else {
-    //     document.querySelector(`.selected_line`).style.background = lastcolor
-    //     document.querySelector(`.selected_line`).classList.remove("selected_line")
-    //     lastcolor = document.querySelector(`.line_${data.replace(/\s/g, '')}`).style.background;
-    //     document.querySelector(`.line_${data.replace(/\s/g, '')}`).className = document.querySelector(`.line_${data.replace(/\s/g, '')}`).className + " selected_line"
-    // }
-
+    console.log('oncklick', data);
 }
 folder.setimg = (name, type) => {
     let path = '../../images/res/folder';
@@ -315,6 +315,12 @@ folder.setimg = (name, type) => {
             return `${path}/md.png`
         } else if (name.split('.')[name.split('.').length - 1] === 'txt') {
             return `${path}/file.png`
+        } else if (name.split('.')[name.split('.').length - 1] === 'json') {
+            return `${path}/json.png`
+        } else if (name.split('.')[name.split('.').length - 1] === 'png') {
+            return `${path}/png.png`
+        } else if (name.split('.')[name.split('.').length - 1] === 'jpg' || name.split('.')[name.split('.').length - 1] === 'jpeg') {
+            return `${path}/jpg.png`
         } 
     }   
 
