@@ -334,17 +334,17 @@ folder.setimg = (name, type) => {
     if (name.indexOf('.') !== -1) {
 
         if (name.split('.')[name.split('.').length - 1] === 'zip') return `${path}/zip.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'go') return `${path}/golang.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'js') return `${path}/js_colors.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'go') return `${path}/go.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'js') return `${path}/js.png`
         else if (name.split('.')[name.split('.').length - 1] === 'html') return `${path}/html.png`
         else if (name.split('.')[name.split('.').length - 1] === 'css') return `${path}/css.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'py') return `${path}/godot_python.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'py') return `${path}/py.png`
         else if (name.split('.')[name.split('.').length - 1] === 'md') return `${path}/md.png`
         else if (name.split('.')[name.split('.').length - 1] === 'txt') return `${path}/file.png`
         else if (name.split('.')[name.split('.').length - 1] === 'json') return `${path}/json.png`
         else if (name.split('.')[name.split('.').length - 1] === 'png') return `${path}/png.png`
         else if (name.split('.')[name.split('.').length - 1] === 'jpg' || name.split('.')[name.split('.').length - 1] === 'jpeg') return `${path}/jpg.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'csv') return `${path}/CSV.png`
+        else if (name.split('.')[name.split('.').length - 1] === 'csv') return `${path}/csv.png`
         else if (name.split('.')[name.split('.').length - 1] === 'mov') return `${path}/mov.png`
         else if (name.split('.')[name.split('.').length - 1] === 'mp3') return `${path}/mp3.png`
         else if (name.split('.')[name.split('.').length - 1] === 'mp4') return `${path}/mp4.png`
