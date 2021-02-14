@@ -208,14 +208,10 @@ folder.renameFile = (oldname, newname) => {
 }
 
 folder.tofile = (dir) => {
-
-    console.log(dir);
-
     let app_folder = document.querySelector('.folder__files');
 
     if (dir == "..") {
         url_folder = url_folder.split("/").slice(0, -1).join("|");
-        console.log(url_folder);
     } else if (dir != "open_folder") {
         url_folder = url_folder + '/' + dir
         url_folder = url_folder.split("/").join("|");
@@ -235,7 +231,6 @@ folder.tofile = (dir) => {
         let local_path = url_folder;
 
             while (local_path.length > 50) {
-                console.log(1);
                 local_path = local_path.split('/').splice(1).join('/');
             }
         document.querySelector('.filepath').innerHTML = local_path
@@ -250,7 +245,6 @@ folder.tofile = (dir) => {
             app_folder.removeChild(app_folder.firstChild);
         }
 
-        console.log(JSON.parse(response)['Files'].length);
         for (let i = 0; i < JSON.parse(response)['Files'].length; i++) {
             files = files + folder.elem(JSON.parse(response)['Files'][i], i)
         }
@@ -292,14 +286,11 @@ folder.getfetch = (url, callback) => {
         .catch(err => console.log(err))
 }
 folder.set_active = (data) => {
-    console.log('oncklick', data);
-
     classNameDiv = `.line_${data.replace(/\s/g, '').replace(/\./g, "__")}_text`
 
     document.querySelectorAll('.btn_disable')[0].classList.add('btn_en')
     document.querySelectorAll('.btn_disable')[1].classList.add('btn_en')
     document.querySelector(classNameDiv).classList.add('active')
-    console.log(document.querySelector(classNameDiv).className);
 }
 folder.btn_rename = () => {
     let last_name = document.querySelector(classNameDiv).innerHTML;
@@ -320,7 +311,6 @@ folder.btn_rename = () => {
 
     document.querySelector('#renameinp').addEventListener('submit', function (e) {
         e.preventDefault();
-        console.log(document.querySelector('.input_rename').value.replace('"', '').replace('/', ''));
         folder.renameFile(last_name, document.querySelector('.input_rename').value.replace('"', '').replace('/', ''))
         document.querySelector(classNameDiv).innerHTML = document.querySelector('.input_rename').value
         document.querySelectorAll('.btn_disable')[0].classList.remove('btn_en')

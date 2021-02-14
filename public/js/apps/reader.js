@@ -18,6 +18,6 @@ reader = new app('reader', false, 'folder.png', 600, 400, false, 'reader', `
             </style>
     `, function (data, name) {
         this.render()
-        document.querySelector('.app_reader').innerHTML = `<pre>${data}</pre>`
+        document.querySelector('.app_reader').innerHTML = `<pre><code>${data}</code></pre>`
         document.querySelector('.app_name_reader').innerHTML = name;
     })
