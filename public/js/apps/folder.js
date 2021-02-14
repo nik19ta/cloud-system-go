@@ -232,18 +232,13 @@ folder.tofile = (dir) => {
 
         url_folder = JSON.parse(response).Name
 
-        // let local_path = url_folder;
+        let local_path = url_folder;
 
-        // console.log("lennnn", local_path.length);
-
-        // console.log('-----------_');
-        // console.log(local_path.length > 50);
-        // if (local_path.length > 50) {
-        //     console.log(local_path.split('/').splice(0));
-        //     local_path.split('/').splice(0, 1).join('/');
-        // }
-        // document.querySelector('.filepath').innerHTML = local_path
-        // console.log('-----------_');
+            while (local_path.length > 50) {
+                console.log(1);
+                local_path = local_path.split('/').splice(1).join('/');
+            }
+        document.querySelector('.filepath').innerHTML = local_path
 
         files = ``
 
