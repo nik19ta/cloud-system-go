@@ -202,7 +202,8 @@ folder.renameFile = (oldname, newname) => {
     path = url_folder + '/' + oldname
     path = path.split('/').join('|')
 
-    folder.getfetch(`/api/renamefile/filepath="${path}",oldname="${oldname}",newname="${newname}""`, (response) => {
+    folder.getfetch(`/api/renamefile/filepath="${path}",oldname="${oldname}",newname="${newname}"`, (response) => {
+        console.log(JSON.parse(response))
         return JSON.parse(response)
     })
 }

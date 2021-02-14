@@ -57,7 +57,7 @@ func renamefile(w http.ResponseWriter, r *http.Request) {
 	oldname := vars["oldname"]
 	filepath := vars["filepath"]
 
-	// fmt.Println(newname, oldname, filepath)
+	
 
 	filepath = strings.Replace(filepath, "|", "/", 20)
 
@@ -66,6 +66,8 @@ func renamefile(w http.ResponseWriter, r *http.Request) {
 	var oper operation.Operation
 
 	newFilePath := strings.Replace(filepath, oldname, newname, 1)
+
+	fmt.Println(newname, "\n", oldname, "\n", filepath, "\n", newFilePath)
 
 	err := file.Rename(newFilePath)
 
@@ -100,5 +102,5 @@ func main() {
 	http.Handle("/", fs)
 
 	fmt.Println("Server is listening...")
-	http.ListenAndServe("0.0.0.0:3000", nil)
+	http.ListenAndServe("localhost:3000", nil)
 }
