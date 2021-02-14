@@ -60,8 +60,12 @@ func RecordDir(path string) Dir {
 }
 
 // CreateDir - создает новую папку <-- принимает имя папки --> возвращает true в случае создания, false в случае неудачи
-func CreateDir(name string) {
-	os.MkdirAll(name, os.ModePerm)
+func CreateDir(name string) bool {
+	err := os.MkdirAll(name, os.ModePerm)
+	if err != nil {
+		return false
+	}
+	return true
 }
 
 // TakeWorkDir - возвращает рабочюю дирикторию

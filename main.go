@@ -57,8 +57,6 @@ func renamefile(w http.ResponseWriter, r *http.Request) {
 	oldname := vars["oldname"]
 	filepath := vars["filepath"]
 
-	
-
 	filepath = strings.Replace(filepath, "|", "/", 20)
 
 	file, _ := wwf.RecordFile(filepath)
@@ -79,7 +77,58 @@ func renamefile(w http.ResponseWriter, r *http.Request) {
 		oper = operation.Record(true, file)
 	}
 
-	fmt.Println(oper)
+	jsonfile, _ := oper.Send()
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(string(jsonfile))
+
+}
+
+func deletefile (w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	filepath := vars["filepath"]
+	filepath = strings.Replace(filepath, "|", "/", 20)
+
+	file, _ := wwf.RecordFile(filepath)
+	
+	isDone := file.Delete()
+	oper := operation.Record(isDone, file)
+
+	jsonfile, _ := oper.Send()
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(string(jsonfile))
+	
+}
+
+func createfile (w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	isDir := vars["isDir"]
+	filepath := vars["filepath"]
+	filepath = strings.Replace(filepath, "|", "/", 20)
+	
+	var oper operation.Operation
+
+	if isDir == "true" {
+		err := wwd.CreateDir(filepath)
+		if err == false {
+			oper = operation.Record(err, wwf.File{}) 
+		} else {
+			dir, _:= wwf.RecordFile(filepath)
+			oper = operation.Record(err, dir)
+		}
+
+	} else {
+		err, file := wwf.CreateFile(filepath)
+		if err == false {
+			oper = operation.Record(err, wwf.File{}) 
+		} else {
+			file, _ = wwf.RecordFile(filepath)
+			oper = operation.Record(err, file)
+		}
+	}
 
 	jsonfile, _ := oper.Send()
 
@@ -97,6 +146,8 @@ func main() {
 	router.HandleFunc(`/api/local_files/dir="{dir}"`, getfiles)
 	router.HandleFunc(`/api/readfile/file="{file}"`, readfile)
 	router.HandleFunc(`/api/renamefile/filepath="{filepath}",oldname="{oldname}",newname="{newname}"`, renamefile)
+	router.HandleFunc(`/api/deletefile/filepath="{filepath}"`, deletefile)
+	router.HandleFunc(`/api/createfile/isDir="{isDir}", filepath="{filepath}"`, createfile)
 
 	http.Handle("/api/", router)
 	http.Handle("/", fs)
