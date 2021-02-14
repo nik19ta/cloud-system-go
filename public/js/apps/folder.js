@@ -221,24 +221,29 @@ folder.tofile = (dir) => {
         url_folder = url_folder.split("/").join("|");
     }
 
-
-    console.log('Запрос на', url_folder);
-
     folder.getfetch(`/api/local_files/dir="${url_folder}"`, (response) => {
+
+        if (classNameDiv != "") {
+            document.querySelectorAll('.btn_disable')[0].classList.remove('btn_en')
+            document.querySelectorAll('.btn_disable')[1].classList.remove('btn_en')
+            document.querySelector(classNameDiv).classList.remove('active')
+            classNameDiv = ''            
+        }
+
         url_folder = JSON.parse(response).Name
 
-        let local_path = url_folder;
+        // let local_path = url_folder;
 
-        console.log("lennnn", local_path.length);
+        // console.log("lennnn", local_path.length);
 
-        console.log('-----------_');
-        console.log(local_path.length > 50);
-        if (local_path.length > 50) {
-            console.log(local_path.split('/').splice(0));
-            local_path.split('/').splice(0, 1).join('/');
-        }
-        document.querySelector('.filepath').innerHTML = local_path
-        console.log('-----------_');
+        // console.log('-----------_');
+        // console.log(local_path.length > 50);
+        // if (local_path.length > 50) {
+        //     console.log(local_path.split('/').splice(0));
+        //     local_path.split('/').splice(0, 1).join('/');
+        // }
+        // document.querySelector('.filepath').innerHTML = local_path
+        // console.log('-----------_');
 
         files = ``
 
@@ -326,6 +331,7 @@ folder.btn_rename = () => {
         document.querySelectorAll('.btn_disable')[0].classList.remove('btn_en')
         document.querySelectorAll('.btn_disable')[1].classList.remove('btn_en')
         document.querySelector(classNameDiv).classList.remove('active')
+        classNameDiv = ''
 
     })
 }
