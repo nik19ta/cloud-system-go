@@ -1,0 +1,27 @@
+// const obj = {
+//   1: 'a',
+//   '1': 'b', 
+//   name: 'Egor', 
+//   'say': () => {
+//     this.name
+//   }
+// };
+
+function User(n, a){
+  
+  this.name = n;
+  this.age = a;
+  /*
+  prototype = {
+    say: function(word){ return `${this.name} say ${word}` }
+  }
+  */
+}
+
+User.prototype.say = function(word){ return `${this.name} say ${word}` }
+
+
+let vasya = new User('Вася', 25);
+let petya = new User('Петя', 13);
+
+console.log(vasya.constructor);

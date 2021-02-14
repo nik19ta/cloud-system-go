@@ -16,7 +16,6 @@ import (
 //readfile - фукция которая отвечает за роут /api/local_files/dir="{dir}" / читает файл
 func readfile(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	fmt.Println(vars)
 	filename := vars["file"]
 
 	path := strings.Replace(filename, "|", "/", 20)
@@ -57,13 +56,18 @@ func renamefile(w http.ResponseWriter, r *http.Request) {
 	newname := vars["newname"]
 	oldname := vars["oldname"]
 	filepath := vars["filepath"]
+
+	// fmt.Println(newname, oldname, filepath)
+
 	filepath = strings.Replace(filepath, "|", "/", 20)
 
 	file, _ := wwf.RecordFile(filepath)
 
 	var oper operation.Operation
 
-	err := file.Rename(newname)
+	newFilePath := strings.Replace(filepath, oldname, newname, 1)
+
+	err := file.Rename(newFilePath)
 
 	if err == false {
 		oper = operation.Record(err, file)
@@ -72,6 +76,8 @@ func renamefile(w http.ResponseWriter, r *http.Request) {
 		file, _ = wwf.RecordFile(newFilePath)
 		oper = operation.Record(true, file)
 	}
+
+	fmt.Println(oper)
 
 	jsonfile, _ := oper.Send()
 
