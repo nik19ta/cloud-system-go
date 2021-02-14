@@ -15,8 +15,8 @@ const folder_html = `
             </div>
             <div class="rigth_block" >
                 <button class='app_folder__header_btn' >Create</button>
-                <button class='app_folder__header_btn' >Delete</button>
-                <button class='app_folder__header_btn' onclick='folder.btn_rename()' >Rename</button>
+                <button class='app_folder__header_btn btn_disable' >Delete</button>
+                <button class='app_folder__header_btn btn_disable' onclick='folder.btn_rename()' >Rename</button>
             </div>
         </div>
         <div class="folder__files" >${files}</div>
@@ -164,6 +164,18 @@ const folder_html = `
    .filepath{
         white-space: nowrap;   
    }
+   .active{
+        background-color: rgb(14, 92, 205);
+        border-radius: 5px;
+    }
+    .btn_disable{
+        opacity: 0.5;
+        cursor: default;
+    }
+    .btn_en{
+        opacity: 1;
+        cursor: pointer;
+    }
     </style>
     `
 
@@ -181,7 +193,6 @@ folder.folder_open_file = (filename) => {
     if (sname === 'png') {} else {
         folder.getfetch(`/api/readfile/file="${localpath}"`, (r) => {
             reader.callback(JSON.parse(r)['Data'], JSON.parse(r)['Name'])
-            console.log(JSON.parse(r));
         })
     }
 
@@ -192,24 +203,7 @@ folder.renameFile = (oldname, newname) => {
     path = path.split('/').join('|')
 
     folder.getfetch(`/api/renamefile/filepath="${path}",oldname="${oldname}",newname="${newname}""`, (response) => {
-        answer = JSON.parse(response)
-        // document.querySelector('.filepath').innerHTML = answer
-        console.log(answer);
-        // files = ``
-
-        // if (JSON.parse(response)['Files'] == null) {
-        //     alert("Папка пустая")
-        // } 
-
-        // while (app_folder.firstChild) {
-        //     app_folder.removeChild(app_folder.firstChild);
-        // }
-
-        // console.log(JSON.parse(response)['Files'].length);
-        // for (let i = 0; i < JSON.parse(response)['Files'].length; i++) {
-        //     files = files + folder.elem(JSON.parse(response)['Files'][i], i)
-        // }
-        // app_folder.innerHTML = files;
+        return JSON.parse(response)
     })
 }
 
@@ -301,16 +295,16 @@ folder.set_active = (data) => {
     console.log('oncklick', data);
 
     classNameDiv = `.line_${data.replace(/\s/g, '').replace(/\./g, "__")}_text`
-}
-folder.test = (e) => {
-    e.preventDefault();
-    console.log(1234);
+
+    document.querySelectorAll('.btn_disable')[0].classList.add('btn_en')
+    document.querySelectorAll('.btn_disable')[1].classList.add('btn_en')
+    document.querySelector(classNameDiv).classList.add('active')
+    console.log(document.querySelector(classNameDiv).className);
 }
 folder.btn_rename = () => {
-    console.log(12345);
     let last_name = document.querySelector(classNameDiv).innerHTML;
     document.querySelector(classNameDiv).innerHTML = `
-    <form id='renameinp' ><input  type="text" class="input_rename" placeholder="${last_name}" ></form>
+    <form id='renameinp' ><input  type="text" class="input_rename" value="${last_name}" ></form>
 
     <style>    
     .input_rename {
@@ -324,10 +318,16 @@ folder.btn_rename = () => {
     </style>
     `
 
-document.querySelector('#renameinp').addEventListener('submit', function(e){
-    e.preventDefault();
-    console.log('!!!!');
-})
+    document.querySelector('#renameinp').addEventListener('submit', function (e) {
+        e.preventDefault();
+        console.log(document.querySelector('.input_rename').value.replace('"', '').replace('/', ''));
+        folder.renameFile(last_name, document.querySelector('.input_rename').value.replace('"', '').replace('/', ''))
+        document.querySelector(classNameDiv).innerHTML = document.querySelector('.input_rename').value
+        document.querySelectorAll('.btn_disable')[0].classList.remove('btn_en')
+        document.querySelectorAll('.btn_disable')[1].classList.remove('btn_en')
+        document.querySelector(classNameDiv).classList.remove('active')
+
+    })
 }
 folder.setimg = (name, type) => {
     let path = '../../images/res/folder';
@@ -360,4 +360,3 @@ folder.setimg = (name, type) => {
     }
 
 }
-
