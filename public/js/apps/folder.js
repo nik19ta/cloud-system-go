@@ -333,24 +333,30 @@ folder.btn_rename = () => {
 }
 folder.setimg = (name, type) => {
     let path = '../../images/res/folder';
-    if (name.indexOf('.') !== -1) {
 
-        if (name.split('.')[name.split('.').length - 1] === 'zip') return `${path}/zip.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'go') return `${path}/go.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'js') return `${path}/js.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'html') return `${path}/html.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'css') return `${path}/css.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'py') return `${path}/py.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'md') return `${path}/md.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'txt') return `${path}/file.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'json') return `${path}/json.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'png') return `${path}/png.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'jpg' || name.split('.')[name.split('.').length - 1] === 'jpeg') return `${path}/jpg.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'csv') return `${path}/csv.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'mov') return `${path}/mov.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'mp3') return `${path}/mp3.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'mp4') return `${path}/mp4.png`
-        else if (name.split('.')[name.split('.').length - 1] === 'ts') return `${path}/ts.png`
+    let icons = {
+        "html": "html",
+        "json": "json",
+        "jpeg": "jpg",
+        "txt":  "txt",
+        "png":  "png",
+        "jpg":  "jpg",
+        "zip":  "zip",
+        "csv":  "csv",
+        "mov":  "mov",
+        "mp3":  "mp3",
+        "mp4":  "mp4",
+        "go":   "go",
+        "js":   "js",
+        "py":   "py",
+        "md":   "md",
+        "ts":   "ts"
+    }
+
+    if (name.indexOf('.') !== -1) {
+        if (icons[name.split('.')[name.split('.').length - 1]] != undefined) {
+            return `${path}/${icons[name.split('.')[name.split('.').length - 1]]}.png`
+        }
     }
 
     if (type) {
