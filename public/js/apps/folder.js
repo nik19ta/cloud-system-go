@@ -332,7 +332,8 @@ folder.btn_rename = () => {
     })
 }
 folder.setimg = (name, type) => {
-    let path = '../../images/res/folder';
+    let path = '../../images/res/';
+    let iconpack = 'egorkaPack';
 
     let icons = {
         "html": "html",
@@ -355,16 +356,16 @@ folder.setimg = (name, type) => {
 
     if (name.indexOf('.') !== -1) {
         if (icons[name.split('.')[name.split('.').length - 1]] != undefined) {
-            return `${path}/${icons[name.split('.')[name.split('.').length - 1]]}.png`
+            return `${path}/${iconpack}/${icons[name.split('.')[name.split('.').length - 1]]}.png`
         }
     }
 
     if (type) {
-        return `${path}/folder.png`
+        return `${path}/${iconpack}/folder.png`
     } else {
-        if (name.includes("git")) return `${path}/git.png`
-        else if (name.indexOf('.') === -1) return `${path}/runfile.png`
-        else return `${path}/defoult.png`
+        if (name.includes("git")) return `${path}/${iconpack}/git.png`
+        else if (name.indexOf('.') === -1) return `${path}/${iconpack}/runfile.png`
+        else return `${path}/${iconpack}/defoult.png`
     }
 
 }
