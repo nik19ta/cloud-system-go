@@ -332,40 +332,20 @@ folder.btn_rename = () => {
     })
 }
 folder.setimg = (name, type) => {
-    let path = '../../images/res/';
-    let iconpack = 'egorkaPack';
-
-    let icons = {
-        "html": "html",
-        "json": "json",
-        "jpeg": "jpg",
-        "txt":  "txt",
-        "png":  "png",
-        "jpg":  "jpg",
-        "zip":  "zip",
-        "csv":  "csv",
-        "mov":  "mov",
-        "mp3":  "mp3",
-        "mp4":  "mp4",
-        "go":   "go",
-        "js":   "js",
-        "py":   "py",
-        "md":   "md",
-        "ts":   "ts"
-    }
-
     if (name.indexOf('.') !== -1) {
-        if (icons[name.split('.')[name.split('.').length - 1]] != undefined) {
-            return `${path}/${iconpack}/${icons[name.split('.')[name.split('.').length - 1]]}.png`
+        let file_extension = icons[name.split('.')[name.split('.').length - 1]];
+
+        if (file_extension != undefined) {
+            return `${path}/${iconpack}/${file_extension}.${photo_extension_default}`
         }
     }
 
     if (type) {
         return `${path}/${iconpack}/folder.png`
     } else {
-        if (name.includes("git")) return `${path}/${iconpack}/git.png`
-        else if (name.indexOf('.') === -1) return `${path}/${iconpack}/runfile.png`
-        else return `${path}/${iconpack}/defoult.png`
+        if (name.includes("git")) return `${path}/${iconpack}/git.${photo_extension_default}`
+        else if (name.indexOf('.') === -1) return `${path}/${iconpack}/runfile.${photo_extension_default}`
+        else return `${path}/${iconpack}/defoult.${photo_extension_default}`
     }
 
 }
