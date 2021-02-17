@@ -202,8 +202,7 @@ folder.renameFile = (oldname, newname) => {
     path = url_folder + '/' + oldname
     path = path.split('/').join('|')
 
-    folder.getfetch(`/api/renamefile/filepath="${path}",oldname="${oldname}",newname="${newname}"`, (response) => {
-        console.log(JSON.parse(response))
+    folder.getfetch(`/api/renamefile/filepath="${path}",oldname="${oldname}",newname="${newname}""`, (response) => {
         return JSON.parse(response)
     })
 }
@@ -256,9 +255,10 @@ folder.tofile = (dir) => {
 folder.elem = (data, i) => {
     return ` <div 
         class='${data['IsDirectory'] ? "file_folder" : "file_no_folder"}  ${i % 2 == 0 ? 'bg_line' : 'fg_line'} line line_${data['Name'].replace(/\s/g, '').replace(/\./g, "__")}'
+        id='line${i}'
 
         ${data['IsDirectory'] ? `ondblclick='folder.tofile("${data['Name']}")'` : `ondblclick='folder.folder_open_file("${data['Name']}")'` }
-        ${`onclick='folder.set_active("${data['Name']}")'`}
+        ${`onclick='folder.set_active("${i}")'`}
         
         >
 
@@ -266,7 +266,12 @@ folder.elem = (data, i) => {
         <img class='image' src="${folder.setimg(data['Name'], data['IsDirectory'])}" alt="">
         </div>
 
-        <p class='folder__filename ${data["Name"].length < 15 ? "center" : ""}  line_${data["Name"].replace(/\s/g, "").replace(/\./g, "__")}_text' >${data["Name"]}</p>
+        <p  
+            id='line_${i}_text'
+            class='
+                folder__filename ${data["Name"].length < 15 ? "center" : ""}
+                line_${data["Name"].replace(/\s/g, "").replace(/\./g, "__")}_text'
+                > ${data["Name"]} </p>
 
         </div>`
 }
@@ -287,7 +292,12 @@ folder.getfetch = (url, callback) => {
         .catch(err => console.log(err))
 }
 folder.set_active = (data) => {
-    classNameDiv = `.line_${data.replace(/\s/g, '').replace(/\./g, "__")}_text`
+    if (document.querySelector('.active') != null) {
+        document.querySelector(classNameDiv).classList.remove('active')
+        classNameDiv = ''
+    }
+    classNameDiv = `#line_${data}_text`
+
 
     document.querySelectorAll('.btn_disable')[0].classList.add('btn_en')
     document.querySelectorAll('.btn_disable')[1].classList.add('btn_en')
