@@ -63,6 +63,9 @@ function app(app_name, show_in_dock, icon, width, height, change_size, title, ht
     this.isopen = false;
     this.callback = callback;
     this.close_window = function() {
+        if (!show_in_dock) {
+            this.del_icon()
+        }
         document.querySelector(`.${this.title}`).remove()
         offset = offset - 30
         if (callbask_in_close) {
@@ -130,12 +133,14 @@ function app(app_name, show_in_dock, icon, width, height, change_size, title, ht
         drag(app, header)
         if (callbackrender) callbackrender()
     }
+    this.del_icon = function() {
+        document.querySelector('#dock').removeChild(document.querySelector(`.icon_${app_name}`))
+    }
     this.render_icon = function() { 
 
         let elem_icon = document.createElement('img')
-        elem_icon.className = `icon_in_dock`     
+        elem_icon.className = `icon_in_dock icon_${app_name}`
         elem_icon.src = `./icons/${this.icon}`
-        elem_icon.style.width = `34px`
         elem_icon.style.height = `34px`
         elem_icon.onclick = function() {
             eval(`${app_name}.render()`)

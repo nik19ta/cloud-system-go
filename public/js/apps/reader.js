@@ -1,4 +1,4 @@
-reader = new app('reader', false, 'folder.png', 600, 400, false, 'reader', `
+reader = new app('reader', false, 'reader.png', 600, 400, false, 'reader', `
             <div class="app_reader" ></div>
                 
             <style>
@@ -16,8 +16,13 @@ reader = new app('reader', false, 'folder.png', 600, 400, false, 'reader', `
                 overflow-y: auto;
             }
             </style>
-    `, function (data, name) {
+    `, function (data) {
+        folder.getfetch(`/api/readfile/file="${data}"`, (r) => {
+            document.querySelector('.app_reader').innerHTML = `<pre><code>${JSON.parse(r)['Data']}</code></pre>`
+            document.querySelector('.app_name_reader').innerHTML = JSON.parse(r)['Name'];
+        })
+
+        this.render_icon()
         this.render()
-        document.querySelector('.app_reader').innerHTML = `<pre><code>${data}</code></pre>`
-        document.querySelector('.app_name_reader').innerHTML = name;
+        
     })

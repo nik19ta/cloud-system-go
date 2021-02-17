@@ -186,16 +186,10 @@ let folder = new app('folder', true, 'folder.png', 600, 400, false, 'Прово�
     url_folder = 'open_folder'
 })
 folder.folder_open_file = (filename) => {
-    let sname = filename.split('.')[filename.split('.').length - 1];
     let localpath = url_folder + '/' + filename;
     localpath = localpath.split('/').join('|')
 
-    if (sname === 'png') {} else {
-        folder.getfetch(`/api/readfile/file="${localpath}"`, (r) => {
-            reader.callback(JSON.parse(r)['Data'], JSON.parse(r)['Name'])
-        })
-    }
-
+    reader.callback(localpath)
 }
 
 folder.renameFile = (oldname, newname) => {
