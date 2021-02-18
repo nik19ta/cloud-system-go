@@ -2,7 +2,7 @@ let desktop_background = './images/backgrounds/1.jpg'
 let title_page = 'System'
 
 // настроцка folder
-let path = '../../images/res/';
+let path_to_iconpack = '../../images/res/';
 let iconpack = 'egorkaPack';
 let photo_extension_default = 'png';
 // настройка папки иконок

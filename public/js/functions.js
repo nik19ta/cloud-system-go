@@ -26,6 +26,4 @@ function show_date_dock() {
     let str = `${days_of_week[date.toDateString().split(' ')[0]]}, ${date.toDateString().split(' ')[2]} ${months[date.toDateString().split(' ')[1]]}. ${date.toTimeString().split(':')[0]}:${date.toTimeString().split(':')[1]} `
 
     document.querySelector('#dock_time').innerHTML = str
-
-    console.log(str);
 }

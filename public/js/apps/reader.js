@@ -1,4 +1,32 @@
-reader = new app('reader', false, 'reader.png', 600, 400, false, 'reader', `
+class Reader extends Application {
+    constructor(...args) {
+        super(...args)
+    }
+
+    getData(data) {
+        this.render()
+
+        fetch(`/api/readfile/file="${data}"`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "GET",
+            })
+            .then(response => response.text())
+            .then((r) => {
+                r = JSON.parse(r)
+                console.log(JSON.parse(r));
+                document.querySelector('.app_reader').innerHTML = `<pre><code>${JSON.parse(r)['Data']}</code></pre>`
+                document.querySelector('.app_name_ReaderApp').innerHTML = JSON.parse(r)['Name'];
+            })
+            .catch(err => console.log(err))
+
+            this.renderIcon()
+    }
+}
+
+let ReaderApp = new Reader('ReaderApp', 'Reader', 'reader.png', `
             <div class="app_reader" ></div>
                 
             <style>
@@ -8,21 +36,12 @@ reader = new app('reader', false, 'reader.png', 600, 400, false, 'reader', `
                 padding-bottom: 10px;
                 font-size: 12px;
                 color: #fff;
-                width: 600px;
-                height: calc(400px - 25px);
+                width: calc(700px - 2px);
+                height: calc(500px - 25px);
                 background-color: rgb(30, 30, 30);
                 border-bottom-left-radius: 8px;
                 border-bottom-right-radius: 8px;
                 overflow-y: auto;
             }
             </style>
-    `, function (data) {
-        folder.getfetch(`/api/readfile/file="${data}"`, (r) => {
-            document.querySelector('.app_reader').innerHTML = `<pre><code>${JSON.parse(r)['Data']}</code></pre>`
-            document.querySelector('.app_name_reader').innerHTML = JSON.parse(r)['Name'];
-        })
-
-        this.render_icon()
-        this.render()
-        
-    })
+    `, 700, 500, true, () => {}, () => {ReaderApp.delIcon()})
