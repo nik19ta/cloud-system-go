@@ -11,7 +11,7 @@ import (
 
 //Dir - структура папок
 type Dir struct {
-	Name  string
+	Name  string 
 	Files []wwf.File
 }
 
