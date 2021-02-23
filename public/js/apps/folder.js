@@ -190,78 +190,78 @@ let FolderHtml = `
     </style>`
 
 class Folder extends Application {
-    constructor(...args) {
+	constructor(...args) {
 
-        super(...args)
+		super(...args)
 
-    }
+	}
 
 
-    folder_open_file(filename) {
-        let localpath = url_folder + '/' + filename;
-        localpath = localpath.split('/').join('|')
+	folder_open_file(filename) {
+		let localpath = url_folder + '/' + filename;
+		localpath = localpath.split('/').join('|')
 
-        ReaderApp.getData(localpath)
-    }
+		ReaderApp.getData(localpath)
+	}
 
-    renameFile(oldname, newname) {
-        path = url_folder + '/' + oldname
-        path = path.split('/').join('|')
+	renameFile(oldname, newname) {
+		path = url_folder + '/' + oldname
+		path = path.split('/').join('|')
 
-        let res = FolderApp.getfetch(`/api/renamefile/filepath="${path}",oldname="${oldname}",newname="${newname}""`, (response) => {
-            console.log(JSON.parse(response));
-            return JSON.parse(response)
-        })
-    }
+		let res = FolderApp.getfetch(`/api/renamefile/filepath="${path}",oldname="${oldname}",newname="${newname}""`, (response) => {
+			console.log(JSON.parse(response));
+			return JSON.parse(response)
+		})
+	}
 
-    tofile(dir) {
-        let app_folder = document.querySelector('.folder__files');
+	tofile(dir) {
+		let app_folder = document.querySelector('.folder__files');
 
-        if (dir == "..") {
-            url_folder = url_folder.split("/").slice(0, -1).join("|");
-        } else if (dir != "open_folder") {
-            url_folder = url_folder + '/' + dir
-            url_folder = url_folder.split("/").join("|");
-        }
+		if (dir == "..") {
+			url_folder = url_folder.split("/").slice(0, -1).join("|");
+		} else if (dir != "open_folder") {
+			url_folder = url_folder + '/' + dir
+			url_folder = url_folder.split("/").join("|");
+		}
 
-        this.getfetch(`/api/local_files/dir="${url_folder}"`, (response) => {
-            console.log(1);
+		this.getfetch(`/api/local_files/dir="${url_folder}"`, (response) => {
+			console.log(1);
 
-            if (classNameDiv != "") {
-                document.querySelectorAll('.btn_disable')[0].classList.remove('btn_en')
-                document.querySelectorAll('.btn_disable')[1].classList.remove('btn_en')
-                document.querySelector(classNameDiv).classList.remove('active')
-                classNameDiv = ''
-            }
+			if (classNameDiv != "") {
+				document.querySelectorAll('.btn_disable')[0].classList.remove('btn_en')
+				document.querySelectorAll('.btn_disable')[1].classList.remove('btn_en')
+				document.querySelector(classNameDiv).classList.remove('active')
+				classNameDiv = ''
+			}
 
-            url_folder = JSON.parse(response).Name
+			url_folder = JSON.parse(response).Name
 
-            let local_path = url_folder;
+			let local_path = url_folder;
 
-            while (local_path.length > 50) {
-                local_path = local_path.split('/').splice(1).join('/');
-            }
-            document.querySelector('.filepath').innerHTML = local_path
+			while (local_path.length > 50) {
+				local_path = local_path.split('/').splice(1).join('/');
+			}
+			document.querySelector('.filepath').innerHTML = local_path
 
-            files = ``
+			files = ``
 
-            if (JSON.parse(response)['Files'] == null) {
-                alert("Папка пустая")
-            }
+			if (JSON.parse(response)['Files'] == null) {
+				alert("Папка пустая")
+			}
 
-            while (app_folder.firstChild) {
-                app_folder.removeChild(app_folder.firstChild);
-            }
+			while (app_folder.firstChild) {
+				app_folder.removeChild(app_folder.firstChild);
+			}
 
-            for (let i = 0; i < JSON.parse(response)['Files'].length; i++) {
-                files = files + FolderApp.elem(JSON.parse(response)['Files'][i], i)
-            }
-            app_folder.innerHTML = files;
-        })
-    }
+			for (let i = 0; i < JSON.parse(response)['Files'].length; i++) {
+				files = files + FolderApp.elem(JSON.parse(response)['Files'][i], i)
+			}
+			app_folder.innerHTML = files;
+		})
+	}
 
-    elem(data, i) {
-        return ` <div 
+	elem(data, i) {
+		return ` <div 
         class='${data['IsDirectory'] ? "file_folder" : "file_no_folder"}  ${i % 2 == 0 ? 'bg_line' : 'fg_line'} line line_${data['Name'].replace(/\s/g, '').replace(/\./g, "__")}'
         id='line${i}'
 
@@ -282,38 +282,38 @@ class Folder extends Application {
                 > ${data["Name"]} </p>
 
         </div>`
-    }
-    // ${data['Name']}
-    getfetch(url, callback) {
-        fetch(`${url}`, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                method: "GET",
-            })
-            .then(response => response.text())
-            .then((response) => {
-                response = JSON.parse(response)
-                callback(response)
-            })
-            .catch(err => console.log(err))
-    }
-    set_active(data) {
-        if (document.querySelector('.active') != null) {
-            document.querySelector(classNameDiv).classList.remove('active')
-            classNameDiv = ''
-        }
-        classNameDiv = `#line_${data}_text`
+	}
+	// ${data['Name']}
+	getfetch(url, callback) {
+		fetch(`${url}`, {
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				method: "GET",
+			})
+			.then(response => response.text())
+			.then((response) => {
+				response = JSON.parse(response)
+				callback(response)
+			})
+			.catch(err => console.log(err))
+	}
+	set_active(data) {
+		if (document.querySelector('.active') != null) {
+			document.querySelector(classNameDiv).classList.remove('active')
+			classNameDiv = ''
+		}
+		classNameDiv = `#line_${data}_text`
 
 
-        document.querySelectorAll('.btn_disable')[0].classList.add('btn_en')
-        document.querySelectorAll('.btn_disable')[1].classList.add('btn_en')
-        document.querySelector(classNameDiv).classList.add('active')
-    }
-    btn_rename() {
-        let last_name = document.querySelector(classNameDiv).innerHTML;
-        document.querySelector(classNameDiv).innerHTML = `
+		document.querySelectorAll('.btn_disable')[0].classList.add('btn_en')
+		document.querySelectorAll('.btn_disable')[1].classList.add('btn_en')
+		document.querySelector(classNameDiv).classList.add('active')
+	}
+	btn_rename() {
+		let last_name = document.querySelector(classNameDiv).innerHTML;
+		document.querySelector(classNameDiv).innerHTML = `
     <form id='renameinp' ><input  type="text" class="input_rename" value="${last_name}" ></form>
 
     <style>    
@@ -328,32 +328,34 @@ class Folder extends Application {
     </style>
     `
 
-        document.querySelector('#renameinp').addEventListener('submit', function (e) {
-            e.preventDefault();
-            FolderApp.renameFile(last_name, document.querySelector('.input_rename').value.replace('"', '').replace('/', ''))
-            document.querySelector(classNameDiv).innerHTML = document.querySelector('.input_rename').value
-            document.querySelectorAll('.btn_disable')[0].classList.remove('btn_en')
-            document.querySelectorAll('.btn_disable')[1].classList.remove('btn_en')
-            document.querySelector(classNameDiv).classList.remove('active')
-            classNameDiv = ''
+		document.querySelector('#renameinp').addEventListener('submit', function (e) {
+			e.preventDefault();
+			FolderApp.renameFile(last_name, document.querySelector('.input_rename').value.replace('"', '').replace('/', ''))
+			document.querySelector(classNameDiv).innerHTML = document.querySelector('.input_rename').value
+			document.querySelectorAll('.btn_disable')[0].classList.remove('btn_en')
+			document.querySelectorAll('.btn_disable')[1].classList.remove('btn_en')
+			document.querySelector(classNameDiv).classList.remove('active')
+			classNameDiv = ''
 
-        })
-    }
-    setimg(name, type) {
-        if (name.indexOf('.') !== -1) {
-            let file_extension = icons[name.split('.')[name.split('.').length - 1]];
-            if (file_extension != undefined) return `${path_to_iconpack}/${iconpack}/${file_extension}.${photo_extension_default}`
-        }
-        if (type) return `${path_to_iconpack}/${iconpack}/folder.png`
-        else {
-            if (name.includes("git")) return `${path_to_iconpack}/${iconpack}/git.${photo_extension_default}`
-            else if (name.indexOf('.') === -1) return `${path_to_iconpack}/${iconpack}/runfile.${photo_extension_default}`
-            else return `${path_to_iconpack}/${iconpack}/defoult.${photo_extension_default}`
-        }
-    }
+		})
+	}
+	setimg(name, type) {
+		if (name.indexOf('.') !== -1) {
+			let file_extension = icons[name.split('.')[name.split('.').length - 1]];
+			if (file_extension != undefined) return `${path_to_iconpack}/${iconpack}/${file_extension}.${photo_extension_default}`
+		}
+		if (type) return `${path_to_iconpack}/${iconpack}/folder.png`
+		else {
+			if (name.includes("git")) return `${path_to_iconpack}/${iconpack}/git.${photo_extension_default}`
+			else if (name.indexOf('.') === -1) return `${path_to_iconpack}/${iconpack}/runfile.${photo_extension_default}`
+			else return `${path_to_iconpack}/${iconpack}/defoult.${photo_extension_default}`
+		}
+	}
 }
 
-let FolderApp = new Folder('FolderApp', 'Folder', 'folder.png', FolderHtml, 600, 400, true, () => {FolderApp.tofile('open_folder')}, () => {})
+let FolderApp = new Folder('FolderApp', 'Folder', 'folder.png', FolderHtml, 600, 400, true, () => {
+	FolderApp.tofile('open_folder')
+}, () => {})
 
 
 FolderApp.renderIcon()

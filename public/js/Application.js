@@ -45,8 +45,6 @@ class Application {
                     width: ${this.ApplicationWidth}px;
                     height: ${this.ApplicationHeight}px;
                     position: absolute;
-                    top: ${ApplicationOffset}px;
-                    left: ${ApplicationOffset}px;
                     border-radius: 8px;
                     padding-top: 25px;
                     border: solid 1px;
@@ -94,6 +92,9 @@ class Application {
         document.querySelector(`.close_${this.ApplicationName}`).addEventListener('click', (e) => {
             this.close()
         })
+        document.querySelector(`#window_app_${this.ApplicationTitle+"_"+this.ApplicationId}`).style.top = ApplicationOffset+'px'
+        document.querySelector(`#window_app_${this.ApplicationTitle+"_"+this.ApplicationId}`).style.left = ApplicationOffset+'px'
+        ApplicationOffset += 30
     }
 
     close() {
@@ -101,6 +102,7 @@ class Application {
             this.PreCloseCallBack()
             document.querySelector(`#window_app_${this.ApplicationTitle+"_"+this.ApplicationId}`).remove()
             this.IsOpen = false
+            ApplicationOffset -= 30
         }
     }
 
