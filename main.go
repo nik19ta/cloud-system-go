@@ -9,6 +9,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/nik19ta/go_server/api/operation"
+	"github.com/nik19ta/go_server/api/settings"
 	"github.com/nik19ta/go_server/api/wwd"
 	"github.com/nik19ta/go_server/api/wwf"
 )
@@ -85,13 +86,13 @@ func renamefile(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func deletefile (w http.ResponseWriter, r *http.Request) {
+func deletefile(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	filepath := vars["filepath"]
 	filepath = strings.Replace(filepath, "|", "/", 20)
 
 	file, _ := wwf.RecordFile(filepath)
-	
+
 	isDone := file.Delete()
 	oper := operation.Record(isDone, file)
 
@@ -100,30 +101,30 @@ func deletefile (w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(string(jsonfile))
-	
+
 }
 
-func createfile (w http.ResponseWriter, r *http.Request) {
+func createfile(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	isDir := vars["isDir"]
 	filepath := vars["filepath"]
 	filepath = strings.Replace(filepath, "|", "/", 20)
-	
+
 	var oper operation.Operation
 
 	if isDir == "true" {
 		err := wwd.CreateDir(filepath)
 		if err == false {
-			oper = operation.Record(err, wwf.File{}) 
+			oper = operation.Record(err, wwf.File{})
 		} else {
-			dir, _:= wwf.RecordFile(filepath)
+			dir, _ := wwf.RecordFile(filepath)
 			oper = operation.Record(err, dir)
 		}
 
 	} else {
 		err, file := wwf.CreateFile(filepath)
 		if err == false {
-			oper = operation.Record(err, wwf.File{}) 
+			oper = operation.Record(err, wwf.File{})
 		} else {
 			file, _ = wwf.RecordFile(filepath)
 			oper = operation.Record(err, file)
@@ -139,6 +140,8 @@ func createfile (w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+
+	fmt.Println(settings.Record(`{"icon-pack": "Pack"}`))
 
 	fs := http.FileServer(http.Dir("./public"))
 	router := mux.NewRouter()
