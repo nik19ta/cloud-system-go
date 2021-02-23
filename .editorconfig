@@ -1,0 +1,17 @@
+# Файл с настройками для редактора.
+
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+indent_style = tab
+
+[*.js]
+indent_style = tab
+
+[*.go]
+indent_style = tab
+
+[*.md]
+indent_style = tab
