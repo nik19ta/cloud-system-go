@@ -156,5 +156,5 @@ func main() {
 	http.Handle("/", fs)
 
 	fmt.Println("Server is listening...")
-	http.ListenAndServe("localhost:3000", nil)
+	http.ListenAndServe(":3000", nil)
 }
