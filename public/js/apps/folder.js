@@ -1,9 +1,6 @@
 let files = ''
 let url_folder = 'open_folder'
-let lastcolor = ''
-
 let classNameDiv = ''
-
 
 let FolderHtml = `
     <div class="app_folder">
@@ -193,6 +190,7 @@ class Folder extends Application {
 	constructor(...args) {
 
 		super(...args)
+		
 
 	}
 
@@ -354,6 +352,7 @@ class Folder extends Application {
 }
 
 let FolderApp = new Folder('FolderApp', 'Folder', 'folder.png', FolderHtml, 600, 400, true, () => {
+	url_folder = 'open_folder'
 	FolderApp.tofile('open_folder')
 }, () => {})
 
