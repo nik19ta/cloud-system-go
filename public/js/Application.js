@@ -31,10 +31,13 @@ class Application {
 
         this.app_html = `
             <div class='${this.ApplicationTitle+"_"+this.ApplicationId} window_app' id='window_app_${this.ApplicationTitle+"_"+this.ApplicationId}' >
-                <div class='header_app header_app_${this.ApplicationName}' >
-                    <div class='close close_${this.ApplicationName}' ></div>
+
+			<div class='close close_${this.ApplicationName}' ></div>
+			
+			<div class='header_app header_app_${this.ApplicationName}' >
                     <div class='app_name_${this.ApplicationName}' ></div>
                 </div>
+				
                 <div class='content_folder${this.ApplicationName}' >
                     ${this.ApplicationHtml}
                 </div>
@@ -59,6 +62,11 @@ class Application {
                 }
                 .close{
                     background: #E996B0;
+					position: absolute;
+
+					top: 5.75px;
+					left: 12px;
+					z-index: 2;
                 }
                 .app_name_${this.ApplicationName} {
                     width: calc(100% - 100px);
@@ -90,6 +98,7 @@ class Application {
         this.IsOpen = true;
 
         document.querySelector(`.close_${this.ApplicationName}`).addEventListener('click', (e) => {
+			console.log(1111);
             this.close()
         })
         document.querySelector(`#window_app_${this.ApplicationTitle+"_"+this.ApplicationId}`).style.top = ApplicationOffset+'px'
@@ -98,6 +107,7 @@ class Application {
     }
 
     close() {
+		console.log(2);
         if (this.IsOpen) {
             this.PreCloseCallBack()
             document.querySelector(`#window_app_${this.ApplicationTitle+"_"+this.ApplicationId}`).remove()
