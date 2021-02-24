@@ -1,6 +1,7 @@
 let files = ''
 let url_folder = 'open_folder'
 let classNameDiv = ''
+let last_name = ''
 
 let FolderHtml = `
     <div class="app_folder">
@@ -203,10 +204,10 @@ class Folder extends Application {
 	}
 
 	renameFile(oldname, newname) {
-		path = url_folder + '/' + oldname
+		let path = url_folder + '/' + oldname
 		path = path.split('/').join('|')
 
-		let res = FolderApp.getfetch(`/api/renamefile/filepath="${path}",oldname="${oldname}",newname="${newname}""`, (response) => {
+		this.getfetch(`/api/renamefile/filepath="${path}",oldname="${oldname}",newname="${newname}"`, (response) => {
 			console.log(JSON.parse(response));
 			return JSON.parse(response)
 		})
@@ -310,29 +311,30 @@ class Folder extends Application {
 		document.querySelector(classNameDiv).classList.add('active')
 	}
 	btn_rename() {
-		let last_name = document.querySelector(classNameDiv).innerHTML;
+		last_name = document.querySelector(classNameDiv).innerHTML;
 		document.querySelector(classNameDiv).innerHTML = `
-    <form id='renameinp' ><input  type="text" class="input_rename" value="${last_name}" ></form>
+			<form id='renameinp' ><input  type="text" class="input_rename" value="${last_name}" ></form>
 
-    <style>    
-    .input_rename {
-        width: 50px;
-        background: #0003;
-        color: #fff;
-        border: 0;
-        border-radius: 4px;
-        padding: 4px;
-    }
-    </style>
-    `
+			<style>    
+			.input_rename {
+				width: 50px;
+				background: #0003;
+				color: #fff;
+				border: 0;
+				border-radius: 4px;
+				padding: 4px;
+			}
+			</style>
+			`
 
 		document.querySelector('#renameinp').addEventListener('submit', function (e) {
 			e.preventDefault();
-			FolderApp.renameFile(last_name, document.querySelector('.input_rename').value.replace('"', '').replace('/', ''))
+			FolderApp.renameFile(last_name.trim(), document.querySelector('.input_rename').value.trim())
 			document.querySelector(classNameDiv).innerHTML = document.querySelector('.input_rename').value
-			document.querySelectorAll('.btn_disable')[0].classList.remove('btn_en')
-			document.querySelectorAll('.btn_disable')[1].classList.remove('btn_en')
-			document.querySelector(classNameDiv).classList.remove('active')
+			// document.querySelectorAll('.btn_disable')[0].classList.remove('btn_en')
+			// document.querySelectorAll('.btn_disable')[1].classList.remove('btn_en')
+			// document.querySelector(classNameDiv).classList.remove('active')
+			last_name = ''
 			classNameDiv = ''
 
 		})
