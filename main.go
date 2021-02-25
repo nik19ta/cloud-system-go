@@ -141,7 +141,7 @@ func createfile(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 
-	fmt.Println(settings.Record(`{"icon-pack": "Pack"}`))
+	fmt.Println(settings.Get())
 
 	fs := http.FileServer(http.Dir("./public"))
 	router := mux.NewRouter()

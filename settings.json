@@ -1,3 +1,13 @@
 {
-  "icon-pack": "Pack"
+	"version": "Beta",
+	"users": [{
+		"username": "root",
+		"password": "pass",
+		"isRoot": true,
+		"iconpack": "EgorkaPack",
+		"team": "dark",
+		"readLanguages": false,
+		"language": "en",
+		"sessionKey": ""
+	}]
 }
