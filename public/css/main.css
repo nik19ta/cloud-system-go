@@ -125,6 +125,7 @@ body {
     cursor: pointer;
     border-radius: 0px;
     transition: transform 0.3s;
+	border-radius: 7px;
 }
 .icon_in_dock:hover {
     /* -webkit-transform: scale(1.2);
@@ -145,4 +146,21 @@ body {
     overflow: auto;
     background: red;
     color: blue;
+}
+
+#lockscreen {
+	position: absolute;
+	top: 0;
+	left: 0;
+
+	width: 100vw;
+	height: 100vh;
+
+	background-image: url('../images/backgrounds/1.jpg');
+
+	background-size: cover;
+
+	filter: blur(16px);
+
+	z-index: 4;
 }

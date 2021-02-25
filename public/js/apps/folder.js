@@ -13,12 +13,17 @@ let FolderHtml = `
                     <p />
             </div>
             <div class="rigth_block">
-                <button class='app_folder__header_btn'>Create</button>
-                <button class='app_folder__header_btn btn_disable'>Delete</button>
+                <button class='app_folder__header_btn' onclick='FolderApp.btn_create()'>Create</button>
+                <button class='app_folder__header_btn btn_disable' >Delete</button>
                 <button class='app_folder__header_btn btn_disable' onclick='FolderApp.btn_rename()'>Rename</button>
             </div>
         </div>
         <div class="folder__files">${files}</div>
+
+		<div class='select_type_file' >
+			<div class='select_type_group' onclick='FolderApp.btn_create("folder")' > <img class='select_type_file__icon' src="../../icons/folder.png" alt=""> Папка </div>
+			<div class='select_type_group' onclick='FolderApp.btn_create("file")' > <img class='select_type_file__icon' src="../../icons/reader.png" alt=""> Файл </div>
+		</div>
     </div>
 
     <style>
@@ -174,6 +179,11 @@ let FolderHtml = `
         .active {
             background-color: rgb(14, 92, 205);
             border-radius: 5px;
+			height: 18px;
+			display: flex;
+			align-items: center;
+			width: 70px;
+			margin-left: 3px;
         }
 
         .btn_disable {
@@ -185,6 +195,42 @@ let FolderHtml = `
             opacity: 1;
             cursor: pointer;
         }
+		.select_type_file{
+			position: absolute;
+			left: calc((598px/2) - (280px/2));
+			top: calc((373px/2) - (180px/2));
+
+			width: 280px;
+			height: 180px;
+
+			background: #262626;
+
+			border-radius: 15px;
+
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+
+			display: none;
+		}
+		.select_type_file__icon{
+			height: 60px;
+			margin-bottom: 4px;
+			transition: transform 0.3s;
+		}
+		.select_type_group{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-wrap: wrap;
+
+			max-width: 70px;
+			
+			cursor: pointer;
+		}
+		.select_type_group:hover .select_type_file__icon {
+			transform: scale(1.1);
+		}
     </style>`
 
 class Folder extends Application {
@@ -310,19 +356,67 @@ class Folder extends Application {
 		document.querySelectorAll('.btn_disable')[1].classList.add('btn_en')
 		document.querySelector(classNameDiv).classList.add('active')
 	}
+
+	btn_create(data) {
+		if (data === undefined) {
+			document.querySelector('.select_type_file').style.display = "flex"
+		} else {
+			// код реализации создания папки
+			document.querySelector('.select_type_file').style.display = "none"
+
+			let new_folder = document.createElement('div')
+				new_folder.className = 'file_folder fg_line line line_api'
+
+			let folder_icon = document.createElement('div')
+				folder_icon.className = "folder__icon"
+
+			let file_name = document.createElement('input')
+				file_name.value = data === "folder" ? "Новая папка" : "Новый файл"
+				file_name.className = "input_rename"
+				
+				file_name.style.width = "70px"
+				file_name.style.background = "#0b4aa4"
+				file_name.style.color = "#fff"
+				file_name.style.border = 0
+				file_name.style.borderRadius = "4px"
+				file_name.style.height = "18px"
+				file_name.style.marginLeft = "3px"
+				file_name.style.textAlign = "center"
+				
+				let icon = document.createElement('img')
+				icon.className = "image"
+				// icon.src = 
+				icon.src = data === "folder" ? "../../images/res//egorkaPack/folder.png" : "../../images/res//egorkaPack/defoult.png"
+
+				folder_icon.appendChild(icon)	
+				new_folder.appendChild(folder_icon)	
+				new_folder.appendChild(file_name)	
+
+			document.querySelector('.folder__files').appendChild(new_folder)
+			console.log('create folder!');
+		// } else if (data === "file") {
+		// 	//  код реализации создания файла
+		// 	document.querySelector('.select_type_file').style.display = "none"
+		// 	console.log('create file!');
+		// } else {
+		// 	console.log("error")
+		// }
+		}
+	}
 	btn_rename() {
 		last_name = document.querySelector(classNameDiv).innerHTML;
 		document.querySelector(classNameDiv).innerHTML = `
-			<form id='renameinp' ><input  type="text" class="input_rename" value="${last_name}" ></form>
+			<form id='renameinp' ><input  type="text" class="input_rename" value="${last_name.trim()}" ></form>
 
 			<style>    
 			.input_rename {
-				width: 50px;
+				width: 76px;
 				background: #0003;
 				color: #fff;
 				border: 0;
 				border-radius: 4px;
-				padding: 4px;
+				padding: 3px;
+				text-align: center;
 			}
 			</style>
 			`

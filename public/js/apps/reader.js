@@ -37,7 +37,7 @@ let ReaderApp = new Reader('ReaderApp', 'Reader', 'reader.png', `
                 font-size: 12px;
                 color: #fff;
                 width: calc(700px - 2px);
-                height: calc(500px - 25px);
+                height: calc(500px - 25px -2px);
                 background-color: rgb(30, 30, 30);
                 border-bottom-left-radius: 8px;
                 border-bottom-right-radius: 8px;
