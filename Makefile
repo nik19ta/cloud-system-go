@@ -12,8 +12,6 @@ buildBack:
 	./main
 
 devFront:
-	go build -v ./main.go
-	./main
 	webpack --mode development  --watch
 
 .DEFAULT_GOAL := build
