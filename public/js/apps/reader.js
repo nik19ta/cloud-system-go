@@ -1,3 +1,5 @@
+import Application from '../Application.js';
+
 class Reader extends Application {
     constructor(...args) {
         super(...args)
@@ -45,3 +47,5 @@ let ReaderApp = new Reader('ReaderApp', 'Reader', 'reader.png', `
             }
             </style>
     `, 700, 500, true, () => {}, () => {ReaderApp.delIcon()})
+
+	export { ReaderApp } 

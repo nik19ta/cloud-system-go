@@ -1,7 +1,10 @@
+const { drag } = require("./functions");
+
+
 let IdApp = 0
 let ApplicationOffset = 30;
 
-class Application {
+export default class Application {
     constructor(
         ApplicationName = 'default',
         ApplicationTitle = 'title',
@@ -92,6 +95,7 @@ class Application {
         app.innerHTML = this.app_html;
 
         document.querySelector('body').appendChild(app)
+
         drag(document.querySelector(`#window_app_${this.ApplicationTitle+"_"+this.ApplicationId}`), document.querySelector(`.header_app_${this.ApplicationName}`))
 
         this.PreOpenCallBack()
@@ -123,7 +127,7 @@ class Application {
     renderIcon() {
         let elem_icon = document.createElement('img')
         elem_icon.className = `icon_in_dock icon_${this.ApplicationName}`
-        elem_icon.src = `./icons/${this.ApplicationIcon}`
+        elem_icon.src = `./images/icons/${this.ApplicationIcon}`
         elem_icon.style.height = `34px`
         elem_icon.onclick = () => {
             if (!this.IsOpen) {
@@ -132,5 +136,4 @@ class Application {
         }
         dock.appendChild(elem_icon)
     }
-
 }

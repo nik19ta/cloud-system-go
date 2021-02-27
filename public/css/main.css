@@ -156,11 +156,11 @@ body {
 	width: 100vw;
 	height: 100vh;
 
-	background-image: url('../images/backgrounds/1.jpg');
+	/* background-image: url('../images/backgrounds/1.jpg'); */
 
 	background-size: cover;
 
-	filter: blur(16px);
+	/* filter: blur(16px); */
 
 	z-index: 4;
 }
