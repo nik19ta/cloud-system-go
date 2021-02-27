@@ -1,3 +1,10 @@
+# System files
 .DS_Store
+# Build files
 main
+# Config Files
 settings.json
+# JS Files
+node_modules
+
+build
