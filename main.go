@@ -143,7 +143,7 @@ func main() {
 
 	fmt.Println(settings.Get())
 
-	fs := http.FileServer(http.Dir("./public"))
+	fs := http.FileServer(http.Dir("./build"))
 	router := mux.NewRouter()
 
 	router.HandleFunc(`/api/local_files/dir="{dir}"`, getfiles)
