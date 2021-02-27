@@ -1,31 +1,23 @@
+import { settings } from './Settings'
+
 import { FolderApp } from './apps/folder'
 import { ReaderApp } from './apps/reader'
+import show_date_dock from './functions'
 
-var show_date_dock = require("./functions");
-
-let desktop_background = './images/backgrounds/1.jpg'
-let title_page = 'System'
-
-// настроцка folder
 
 
 function init() {
 	show_date_dock.show_date_dock()
-	document.querySelector('body').style.background = `url(${desktop_background})`
-	document.querySelector("title").innerHTML = title_page;	
+	document.querySelector('body').style.background = `url(${settings.get('desktop_background')})`
+	document.querySelector("title").innerHTML = settings.get('title_page');	
+
 }
+setInterval(() => show_date_dock.show_date_dock(), 60000)
 
 init()
 
-
-setInterval(() => show_date_dock.show_date_dock(), 60000)
 
 
 
 window.FolderApp = FolderApp
 window.ReaderApp = ReaderApp
-
-FolderApp.renderIcon()
-// FolderApp.render()
-
-// console.log(FolderApp)

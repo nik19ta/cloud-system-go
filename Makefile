@@ -2,11 +2,10 @@
 build:
 	webpack
 	go build -v ./main.go
-
+	./main
 buildFront:
 	webpack
 	open ./build/index.html
-
 buildBack:
 	go build -v ./main.go
 	./main

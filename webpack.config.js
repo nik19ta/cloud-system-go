@@ -9,7 +9,7 @@ module.exports = {
 	context: path.resolve(__dirname, "public"),
 	mode: "development", //production
 	entry: {
-		main: './js/main.js'
+		main: './js/Main.js'
 	},
 	output: {
 		filename: "[name].[contenthash].js",

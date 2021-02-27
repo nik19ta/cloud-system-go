@@ -1,42 +1,12 @@
 import Application from '../Application.js';
 
+import { settings } from '../Settings'
 
-let path_to_iconpack = '../../images/res/';
-let iconpack = 'egorkaPack';
-let photo_extension_default = 'png';
+
+
+
 // настройка папки иконок
-let icons = {
-    "html": "html",
-    "json": "json",
-    "jpeg": "jpg",
-    "java": "java",
-    "webp": "webp",
-    "scss": "scss",
-    "cpp":  "cpp",
-    "txt":  "txt",
-    "png":  "png",
-    "jpg":  "jpg",
-    "zip":  "zip",
-    "csv":  "csv",
-    "css":  "css",
-    "mov":  "mov",
-    "mp3":  "mp3",
-    "mp4":  "mp4",
-    "dmg":  "dmg",
-    "pkg":  "pkg",
-    "exe":  "exe",
-    "ico":  "ico",
-    "jar":  "jar",
-    "jsx":  "jsx",
-    "xml":  "xml",
-    "cs":   "cs",
-    "go":   "go",
-    "js":   "js",
-    "py":   "py",
-    "md":   "md",
-    "ts":   "ts",
-    "sh":   "sh",
-}
+
 
 let files = ''
 let url_folder = 'open_folder'
@@ -475,14 +445,14 @@ class Folder extends Application {
 	}
 	setimg(name, type) {
 		if (name.indexOf('.') !== -1) {
-			let file_extension = icons[name.split('.')[name.split('.').length - 1]];
-			if (file_extension != undefined) return `${path_to_iconpack}/${iconpack}/${file_extension}.${photo_extension_default}`
+			let file_extension = settings.get('icons')[name.split('.')[name.split('.').length - 1]];
+			if (file_extension != undefined) return `${settings.get('path_to_iconpack')}/${settings.get('iconpack')}/${file_extension}.${settings.get('photo_extension_default')}`
 		}
-		if (type) return `${path_to_iconpack}/${iconpack}/folder.png`
+		if (type) return `${settings.get('path_to_iconpack')}/${settings.get('iconpack')}/folder.png`
 		else {
-			if (name.includes("git")) return `${path_to_iconpack}/${iconpack}/git.${photo_extension_default}`
-			else if (name.indexOf('.') === -1) return `${path_to_iconpack}/${iconpack}/runfile.${photo_extension_default}`
-			else return `${path_to_iconpack}/${iconpack}/defoult.${photo_extension_default}`
+			if (name.includes("git")) return `${settings.get('path_to_iconpack')}/${settings.get('iconpack')}/git.${settings.get('photo_extension_default')}`
+			else if (name.indexOf('.') === -1) return `${settings.get('path_to_iconpack')}/${settings.get('iconpack')}/runfile.${settings.get('photo_extension_default')}`
+			else return `${settings.get('path_to_iconpack')}/${settings.get('iconpack')}/defoult.${settings.get('photo_extension_default')}`
 		}
 	}
 }
@@ -493,4 +463,7 @@ let FolderApp = new Folder('FolderApp', 'Folder', 'folder.png', FolderHtml, 600,
 	FolderApp.tofile('open_folder')
 }, () => {})
 
+FolderApp.renderIcon()
+
 export { FolderApp } 
+

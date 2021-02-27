@@ -1,0 +1,50 @@
+export default class Settings {
+	constructor() {
+		this.data = {}
+		this.data['desktop_background'] = './images/backgrounds/1.jpg'
+		this.data['title_page'] = 'System'
+		this.data['path_to_iconpack'] = '../../images/res/'
+		this.data['icons'] = {
+			"html": "html",
+			"json": "json",
+			"jpeg": "jpg",
+			"java": "java",
+			"webp": "webp",
+			"scss": "scss",
+			"cpp":  "cpp",
+			"txt":  "txt",
+			"png":  "png",
+			"jpg":  "jpg",
+			"zip":  "zip",
+			"csv":  "csv",
+			"css":  "css",
+			"mov":  "mov",
+			"mp3":  "mp3",
+			"mp4":  "mp4",
+			"dmg":  "dmg",
+			"pkg":  "pkg",
+			"exe":  "exe",
+			"ico":  "ico",
+			"jar":  "jar",
+			"jsx":  "jsx",
+			"xml":  "xml",
+			"cs":   "cs",
+			"go":   "go",
+			"js":   "js",
+			"py":   "py",
+			"md":   "md",
+			"ts":   "ts",
+			"sh":   "sh",
+		}
+		this.data['photo_extension_default'] = 'png'
+		this.data['iconpack'] = 'egorkaPack'
+	}
+
+	get(field) {
+		return this.data[field]
+	}
+}
+
+const settings = new Settings()
+
+export { settings }
