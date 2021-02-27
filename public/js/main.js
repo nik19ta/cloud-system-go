@@ -4,7 +4,7 @@ import { FolderApp } from './apps/folder'
 import { ReaderApp } from './apps/reader'
 import show_date_dock from './functions'
 
-
+import '../css/main.css'
 
 function init() {
 	show_date_dock.show_date_dock()

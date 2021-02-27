@@ -4,10 +4,21 @@ const {
 	CleanWebpackPlugin
 } = require('clean-webpack-plugin');
 const CopyWebPackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = {
 	context: path.resolve(__dirname, "public"),
-	mode: "development", //production
+	mode: "production", //production
+	optimization: {
+		splitChunks: {
+			chunks: "all"
+		},
+		minimize: true,
+		minimizer: [
+			  new CssMinimizerPlugin(),
+		],
+	},
 	entry: {
 		main: './js/Main.js'
 	},
@@ -22,16 +33,13 @@ module.exports = {
 		}),
 		new CleanWebpackPlugin(),
 		new CopyWebPackPlugin({
-			patterns: [
-				{
-					from: "images",
-					to: "images"
-				},
-				{
-					from: "css",
-					to: "css"
-				}
-			],
+			patterns: [{
+				from: "images",
+				to: "images"
+			}],
+		}),
+		new MiniCssExtractPlugin({
+			filename: "[name].[contenthash].css",
 		})
 	],
 	resolve: {
@@ -44,7 +52,12 @@ module.exports = {
 	module: {
 		rules: [{
 				test: /\.css$/,
-				use: ['style-loader', 'css-loader']
+				use: [{
+						loader: MiniCssExtractPlugin.loader,
+						options: {},
+					},
+					'css-loader',
+				],
 			},
 			{
 				test: /\.(png|svg|jpg)$/,
