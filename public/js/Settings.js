@@ -43,6 +43,15 @@ export default class Settings {
 	get(field) {
 		return this.data[field]
 	}
+
+	get_fields(separator) {
+		let str = "";
+		for (var key in this.data) {
+			console.log(key)
+			str += key + separator
+		}
+		return str
+	}
 }
 
 const settings = new Settings()
