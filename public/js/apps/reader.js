@@ -19,7 +19,7 @@ class Reader extends Application {
             .then((r) => {
                 r = JSON.parse(r)
                 console.log(JSON.parse(r));
-                document.querySelector('.app_reader').innerHTML = `<pre><code>${JSON.parse(r)['Data']}</code></pre>`
+                document.querySelector('.app_reader').innerHTML = `<pre class="text" ><code>${JSON.parse(r)['Data']}</code></pre>`
                 document.querySelector('.app_name_ReaderApp').innerHTML = JSON.parse(r)['Name'];
             })
             .catch(err => console.log(err))
@@ -45,6 +45,9 @@ let ReaderApp = new Reader('ReaderApp', 'Reader', 'reader.png', `
                 border-bottom-right-radius: 8px;
                 overflow-y: auto;
             }
+			.text {
+				height: 431px;
+			}
             </style>
     `, 700, 500, true, () => {}, () => {ReaderApp.delIcon()})
 
