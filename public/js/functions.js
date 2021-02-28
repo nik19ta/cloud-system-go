@@ -1,34 +1,21 @@
-module.exports = {
-	show_date_dock: function () {
-		let date = new Date();
-		let days_of_week = {
-			'Sun': 'Вс',
-			'Mon': 'Пн',
-			'Tue': 'Вт',
-			'Wed': 'Ср',
-			'Thu': 'Чт',
-			'Fri': 'Пт',
-			'Sat': 'Сб'
-		}
-		let months = {
-			'Jan': 'янв',
-			'Feb': 'фев',
-			'Mar': 'мар',
-			'Apr': 'апр',
-			'May': 'май',
-			'Jun': 'июн',
-			'Jul': 'июл',
-			'Aug': 'авг',
-			'Sep': 'сен',
-			'Oct': 'окт',
-			'Nov': 'ноя',
-			'Dec': 'дек'
-		}
-		let str = `${days_of_week[date.toDateString().split(' ')[0]]}, ${date.toDateString().split(' ')[2]} ${months[date.toDateString().split(' ')[1]]}. ${date.toTimeString().split(':')[0]}:${date.toTimeString().split(':')[1]} `
-		document.querySelector('#dock_time').innerHTML = str
-	},
+import { settings } from './Settings'
 
-	drag: function(elem, elemM) {
+class Functions {
+	constructor() {}
+
+	show_date_dock() {
+		let date = new Date();
+
+		document.querySelector('#dock_time').innerHTML = `
+			${settings.get('days_of_week')[date.toDateString().split(' ')[0]]},
+			${date.toDateString().split(' ')[2]} 
+			${settings.get('months')[date.toDateString().split(' ')[1]]}. 
+			${date.toTimeString().split(':')[0]}:${date.toTimeString().split(':')[1]}`
+	}
+
+	drag(elem, elemM) {
+		elem.style.zIndex = 1000;
+		
 		elemM.onmousedown = function(e) {
 
 			var coords = getCoords(elem);
@@ -46,9 +33,7 @@ module.exports = {
 				elem.style.top = e.pageY - shiftY + 'px';
 			}
 
-			document.onmousemove = function(e) {
-				moveAt(e);
-			};
+			document.onmousemove = function(e) { moveAt(e) };
 
 			elem.onmouseup = function() {
 				document.onmousemove = null;
@@ -57,19 +42,9 @@ module.exports = {
 
 		}
 
-		elemM.ondragstart = function() {
-			return false;
-		};
+		elemM.ondragstart = function() { return false };
 
-		function getCoords(elem) { // кроме IE8-
-			var box = elem.getBoundingClientRect();
-			return {
-				top: box.top + pageYOffset,
-				left: box.left + pageXOffset
-			};
-		}
-
-		function getCoords(elem) { // кроме IE8-
+		function getCoords(elem) {
 			var box = elem.getBoundingClientRect();
 			return {
 				top: box.top + pageYOffset,
@@ -78,4 +53,8 @@ module.exports = {
 		}
 
 	}
-};
+
+}
+
+const functions = new Functions()
+export { functions } 

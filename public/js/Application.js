@@ -1,4 +1,4 @@
-const { drag } = require("./functions");
+import { functions } from './Functions'
 
 
 let IdApp = 0
@@ -96,7 +96,7 @@ export default class Application {
 
         document.querySelector('body').appendChild(app)
 
-        drag(document.querySelector(`#window_app_${this.ApplicationTitle+"_"+this.ApplicationId}`), document.querySelector(`.header_app_${this.ApplicationName}`))
+        functions.drag(document.querySelector(`#window_app_${this.ApplicationTitle+"_"+this.ApplicationId}`), document.querySelector(`.header_app_${this.ApplicationName}`))
 
         this.PreOpenCallBack()
         this.IsOpen = true;

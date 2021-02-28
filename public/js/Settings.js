@@ -38,6 +38,29 @@ export default class Settings {
 		}
 		this.data['photo_extension_default'] = 'png'
 		this.data['iconpack'] = 'egorkaPack'
+		this.data['days_of_week'] = {
+			'Sun': 'Вс',
+			'Mon': 'Пн',
+			'Tue': 'Вт',
+			'Wed': 'Ср',
+			'Thu': 'Чт',
+			'Fri': 'Пт',
+			'Sat': 'Сб'
+		}
+		this.data['months'] = {
+			'Jan': 'янв',
+			'Feb': 'фев',
+			'Mar': 'мар',
+			'Apr': 'апр',
+			'May': 'май',
+			'Jun': 'июн',
+			'Jul': 'июл',
+			'Aug': 'авг',
+			'Sep': 'сен',
+			'Oct': 'окт',
+			'Nov': 'ноя',
+			'Dec': 'дек'
+		}
 	}
 
 	get(field) {
