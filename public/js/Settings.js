@@ -47,10 +47,10 @@ export default class Settings {
 	get_fields(separator) {
 		let str = "";
 		for (var key in this.data) {
-			console.log(key)
-			str += key + separator
+			str += key + (separator == undefined ? "," : separator)
 		}
-		return str
+
+		return str.substring(0, str.length - (separator == undefined ? 1 : separator.length))
 	}
 }
 
