@@ -10,6 +10,9 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 module.exports = {
 	context: path.resolve(__dirname, "public"),
 	mode: "production", //production
+	performance: {
+    	hints: false,
+  	},
 	optimization: {
 		splitChunks: {
 			chunks: "all"
