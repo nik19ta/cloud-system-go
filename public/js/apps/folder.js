@@ -2,9 +2,6 @@ import Application from '../Application.js';
 
 import { settings } from '../Settings'
 
-
-
-
 // настройка папки иконок
 
 
@@ -31,8 +28,8 @@ let FolderHtml = `
         <div class="folder__files">${files}</div>
 
 		<div class='select_type_file' >
-			<div class='select_type_group' onclick='FolderApp.btn_create("folder")' > <img class='select_type_file__icon' src="../../icons/folder.png" alt=""> Папка </div>
-			<div class='select_type_group' onclick='FolderApp.btn_create("file")' > <img class='select_type_file__icon' src="../../icons/reader.png" alt=""> Файл </div>
+			<div class='select_type_group' onclick='FolderApp.btn_create("folder")' > <img class='select_type_file__icon' src="./images/icons/folder.png" alt=""> Папка </div>
+			<div class='select_type_group' onclick='FolderApp.btn_create("file")' > <img class='select_type_file__icon' src="./images/icons/reader.png" alt=""> Файл </div>
 		</div>
     </div>
 
@@ -264,7 +261,7 @@ class Folder extends Application {
 		path = path.split('/').join('|')
 
 		this.getfetch(`/api/renamefile/filepath="${path}",oldname="${oldname}",newname="${newname}"`, (response) => {
-			console.log(JSON.parse(response));
+			// console.log(JSON.parse(response));
 			return JSON.parse(response)
 		})
 	}
@@ -280,8 +277,6 @@ class Folder extends Application {
 		}
 
 		this.getfetch(`/api/local_files/dir="${url_folder}"`, (response) => {
-			console.log(1);
-
 			if (classNameDiv != "") {
 				document.querySelectorAll('.btn_disable')[0].classList.remove('btn_en')
 				document.querySelectorAll('.btn_disable')[1].classList.remove('btn_en')
@@ -317,7 +312,8 @@ class Folder extends Application {
 
 	elem(data, i) {
 		return ` <div 
-        class='${data['IsDirectory'] ? "file_folder" : "file_no_folder"}  ${i % 2 == 0 ? 'bg_line' : 'fg_line'} line line_${data['Name'].replace(/\s/g, '').replace(/\./g, "__")}'
+        class='${data['IsDirectory'] ? "file_folder" : "file_no_folder"} line'
+
         id='line${i}'
 
         ${data['IsDirectory'] ? `ondblclick='FolderApp.tofile("${data['Name']}")'` : `ondblclick='FolderApp.folder_open_file("${data['Name']}")'` }
@@ -331,10 +327,10 @@ class Folder extends Application {
 
         <p  
             id='line_${i}_text'
-            class='
-                folder__filename ${data["Name"].length < 15 ? "center" : ""}
-                line_${data["Name"].replace(/\s/g, "").replace(/\./g, "__")}_text'
-                > ${data["Name"]} </p>
+
+            class='folder__filename ${data["Name"].length < 15 ? "center" : ""}'
+            
+			> ${data["Name"]} </p>
 
         </div>`
 	}
@@ -375,7 +371,8 @@ class Folder extends Application {
 			document.querySelector('.select_type_file').style.display = "none"
 
 			let new_folder = document.createElement('div')
-				new_folder.className = 'file_folder fg_line line line_api'
+				new_folder.className = `file_folder line line_api ${data === "folder" ? "file_folder" : "file_no_folder"}`
+				new_folder.id=`line${+document.querySelector('.folder__files').childNodes[document.querySelector('.folder__files').childNodes.length -1].id.split('line')[1]+1}`
 
 			let folder_icon = document.createElement('div')
 				folder_icon.className = "folder__icon"
@@ -393,24 +390,29 @@ class Folder extends Application {
 				file_name.style.marginLeft = "3px"
 				file_name.style.textAlign = "center"
 				
-				let icon = document.createElement('img')
-				icon.className = "image"
-				// icon.src = 
-				icon.src = data === "folder" ? "../../images/res//egorkaPack/folder.png" : "../../images/res//egorkaPack/defoult.png"
+			let form_create = document.createElement('form')
+				form_create.addEventListener('submit', function (e) {
+					e.preventDefault();
+					// console.log(data === "folder" ? "Новая папка" : "Новый файл")
+					
+					document.querySelector(`#line${+document.querySelector('.folder__files')
+					.childNodes[document.querySelector('.folder__files')
+					.childNodes.length -1].id.split('line')[1]}`).childNodes[1].innerHTML = 
+					`<p class='folder__filename'  >${document.querySelector(`#line${+document.querySelector('.folder__files').childNodes[document.querySelector('.folder__files').childNodes.length -1].id.split('line')[1]}`).childNodes[1]['firstElementChild']['value']}</p>`
+					// id='line_${100}_text'
+				})
+				
+			let icon = document.createElement('img')
+			icon.className = "image"
+			// icon.src = 
+			icon.src = data === "folder" ? "../../images/res//egorkaPack/folder.png" : "../../images/res//egorkaPack/defoult.png"
 
-				folder_icon.appendChild(icon)	
-				new_folder.appendChild(folder_icon)	
-				new_folder.appendChild(file_name)	
+			folder_icon.appendChild(icon)	
+			new_folder.appendChild(folder_icon)	
+			form_create.appendChild(file_name)	
+			new_folder.appendChild(form_create)	
 
 			document.querySelector('.folder__files').appendChild(new_folder)
-			console.log('create folder!');
-		// } else if (data === "file") {
-		// 	//  код реализации создания файла
-		// 	document.querySelector('.select_type_file').style.display = "none"
-		// 	console.log('create file!');
-		// } else {
-		// 	console.log("error")
-		// }
 		}
 	}
 	btn_rename() {
@@ -457,13 +459,11 @@ class Folder extends Application {
 	}
 }
 
-
-let FolderApp = new Folder('FolderApp', 'Folder', 'folder.png', FolderHtml, 600, 400, true, () => {
+const FolderApp = new Folder('FolderApp', 'Folder', 'folder.png', FolderHtml, 600, 400, true, () => {
 	url_folder = 'open_folder'
 	FolderApp.tofile('open_folder')
 }, () => {})
 
 FolderApp.renderIcon()
 
-export { FolderApp } 
-
+export { FolderApp }

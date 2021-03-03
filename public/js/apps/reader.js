@@ -18,7 +18,6 @@ class Reader extends Application {
             .then(response => response.text())
             .then((r) => {
                 r = JSON.parse(r)
-                console.log(JSON.parse(r));
                 document.querySelector('.app_reader').innerHTML = `<pre class="text" ><code>${JSON.parse(r)['Data']}</code></pre>`
                 document.querySelector('.app_name_ReaderApp').innerHTML = JSON.parse(r)['Name'];
             })

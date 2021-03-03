@@ -27,8 +27,8 @@ export default class Application {
         this.PreOpenCallBack = PreOpenCallBack
         this.PreCloseCallBack = PreCloseCallBack
 
-        IdApp++
         this.ApplicationId = IdApp
+        IdApp++
 
         this.IsOpen = false
 
@@ -89,7 +89,7 @@ export default class Application {
     }
 
     render() {
-        if (this.IsOpen) return
+        // if (this.IsOpen) return
 
         let app = document.createElement('div');
         app.innerHTML = this.app_html;
@@ -102,7 +102,6 @@ export default class Application {
         this.IsOpen = true;
 
         document.querySelector(`.close_${this.ApplicationName}`).addEventListener('click', (e) => {
-			console.log(1111);
             this.close()
         })
         document.querySelector(`#window_app_${this.ApplicationTitle+"_"+this.ApplicationId}`).style.top = ApplicationOffset+'px'
